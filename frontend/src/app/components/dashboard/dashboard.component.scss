@@ -1,0 +1,23 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: start;
+  box-sizing: border-box;
+  height: 100vh;
+}
+
+.toolbar {
+  gap: 20px;
+}
+
+.container {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.content-container {
+  position: relative;
+  padding: 1em;
+}

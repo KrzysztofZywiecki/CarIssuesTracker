@@ -1,27 +1,3 @@
-.container {
-  flex: 1;
-  box-sizing: border-box;
-  padding: 0;
-}
-
-.toolbar {
-  gap: 20px;
-}
-
-.app-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: start;
-  box-sizing: border-box;
-  height: 100vh;
-}
-
-.content-container {
-  position: relative;
-  padding: 1em;
-}
-
 .floating-top {
   position: absolute;
   top: 0;
