@@ -1,3 +1,4 @@
+using backend.Migrations;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,46 +16,21 @@ public class CarIssuesController : ControllerBase
     [HttpGet]
     public CarIssue[] GetIssues()
     {
-        return carIssueContext.CarIssues.Include(x => x.Owner).ToArray();
+        return carIssueContext.CarIssues.ToArray();
     }
 
     [HttpGet]
     [Route("/{Id}")]
-    public CarIssue[] GetIssuesForUser(long Id)
+    public ActionResult<CarIssue> GetIssuesForUser(long Id)
     {
-        return carIssueContext.CarIssues.Where(x => x.Owner.Id == Id).ToArray();
-    }
-
-    [HttpPost]
-    [Route("/user")]
-    public User AddUser(User user)
-    {
-        carIssueContext.Users.Add(user);
-        carIssueContext.SaveChanges();
-        return user;
-    }
-
-    [HttpPost]
-    [Route("/specific")]
-    public CarIssue? AddIssue(CarIssueDTO issue)
-    {
-        var user = carIssueContext.Users.Find(issue.OwnerId);
-        if (user == null)
+        var found = carIssueContext.CarIssues.Find(Id);
+        if (found != null)
         {
-            return null;
+            return found;
         }
         else
         {
-            var createdIssue = new CarIssue
-            {
-                Id = 0,
-                Description = issue.Description,
-                Owner = user
-            };
-            carIssueContext.CarIssues.Add(createdIssue);
-            carIssueContext.SaveChanges();
-
-            return createdIssue;
+            return NotFound();
         }
     }
 }

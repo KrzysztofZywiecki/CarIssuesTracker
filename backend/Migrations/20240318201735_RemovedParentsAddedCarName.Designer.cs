@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(CarIssueContext))]
-    partial class CarIssueContextModelSnapshot : ModelSnapshot
+    [Migration("20240318201735_RemovedParentsAddedCarName")]
+    partial class RemovedParentsAddedCarName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -26,12 +29,12 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<long?>("UserId")
+                    b.Property<long>("OwnerId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Cars");
                 });
@@ -82,9 +85,13 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Car", b =>
                 {
-                    b.HasOne("Backend.Models.User", null)
+                    b.HasOne("Backend.Models.User", "Owner")
                         .WithMany("Cars")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Backend.Models.CarIssue", b =>
