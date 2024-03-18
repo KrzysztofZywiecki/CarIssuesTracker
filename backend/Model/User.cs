@@ -1,12 +1,12 @@
-using System.Text.Json.Serialization;
-
 namespace Backend.Models;
 
-public record User
+public class User(long Id, string Username, ICollection<Car> Cars)
 {
-    public long Id { get; set; }
-    public string Username { get; set; } = "";
+    public User() : this(Id: 0, Username: "", Cars: []) { }
 
-    // [JsonIgnore]
-    public ICollection<CarIssue> CarIssues { get; set; } = [];
+
+    public long Id { get; init; } = Id;
+    public string Username { get; init; } = Username;
+    public ICollection<Car> Cars { get; init; } = Cars;
 }
+

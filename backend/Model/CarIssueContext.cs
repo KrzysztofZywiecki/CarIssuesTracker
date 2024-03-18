@@ -8,4 +8,5 @@ public class CarIssueContext : DbContext
 
     public DbSet<CarIssue> CarIssues { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Car> Cars { get; set; }
 }
