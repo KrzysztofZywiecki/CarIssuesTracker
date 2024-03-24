@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-[Route("/car")]
+[Route("car")]
 public class CarController(CarIssueContext carIssueContext) : ControllerBase
 {
     private readonly CarIssueContext carIssueContext = carIssueContext;

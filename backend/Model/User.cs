@@ -12,7 +12,7 @@ public class User(long Id, string Username, ICollection<Car> Cars)
 
 public record CreateUserDTO(string Username);
 
-public record UserDTO(long Id, string Username, ICollection<Car> Cars)
+public record UserDTO(long Id, string Username)
 {
-    public UserDTO(User user) : this(Id: user.Id, Username: user.Username, Cars: user.Cars) { }
+    public UserDTO(User user) : this(Id: user.Id, Username: user.Username) { }
 }

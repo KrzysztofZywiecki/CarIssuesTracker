@@ -20,7 +20,7 @@ public class CarIssuesController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/{Id}")]
+    [Route("{Id}")]
     public ActionResult<CarIssue> GetIssuesForUser(long Id)
     {
         var found = carIssueContext.CarIssues.Find(Id);

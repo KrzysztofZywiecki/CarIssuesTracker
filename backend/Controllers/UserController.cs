@@ -4,17 +4,32 @@ using Microsoft.AspNetCore.Mvc;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-[Route("/user")]
+[Route("user")]
 public class UserController(CarIssueContext carIssueContext) : ControllerBase
 {
     private readonly CarIssueContext carIssueContext = carIssueContext;
 
-    [Route("all")]
-    [HttpGet]
+    [HttpGet("all")]
     public async Task<User[]> GetUsers()
     {
         var users = await carIssueContext.Users.ToArrayAsync();
         return users;
+    }
+
+    [HttpGet("{Id}")]
+    public async Task<ActionResult<UserDTO>> GetUser(long Id)
+    {
+        var user = await carIssueContext.Users.FindAsync(Id);
+
+        if (user != null)
+        {
+            return new UserDTO(user);
+        }
+        else
+        {
+            return NotFound();
+        }
+
     }
 
     [HttpPost]
