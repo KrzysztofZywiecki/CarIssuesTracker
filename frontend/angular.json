@@ -26,7 +26,8 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/assets"],
-            "styles": ["src/custom-theme.scss", "src/styles.css"]
+            "styles": ["src/custom-theme.scss", "src/styles.scss"],
+            "stylePreprocessorOptions": {"includePaths": ["src"]}
           },
           "configurations": {
             "production": {

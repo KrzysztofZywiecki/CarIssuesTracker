@@ -1,7 +1,6 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -13,23 +12,39 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $car-issues-tracker-primary: mat.define-palette(mat.$indigo-palette);
-$car-issues-tracker-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$car-issues-tracker-warn: mat.define-palette(mat.$red-palette);
+$car-issues-tracker-accent: mat.define-palette(
+  mat.$pink-palette,
+  A200,
+  A100,
+  A400
+);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$car-issues-tracker-theme: mat.define-light-theme((
-  color: (
-    primary: $car-issues-tracker-primary,
-    accent: $car-issues-tracker-accent,
-    warn: $car-issues-tracker-warn,
-  )
-));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($car-issues-tracker-theme);
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $car-issues-tracker-primary,
+      accent: $car-issues-tracker-accent,
+    ),
+  )
+);
 
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $car-issues-tracker-primary,
+      accent: $car-issues-tracker-accent,
+    ),
+  )
+);
+
+@include mat.all-component-themes($dark-theme);
+
+@media (prefers-color-scheme: light) {
+  @include mat.all-component-colors($light-theme);
+}
