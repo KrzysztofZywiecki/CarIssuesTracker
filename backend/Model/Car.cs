@@ -1,5 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Components;
 
 namespace Backend.Models;
 
@@ -21,4 +22,4 @@ public record CarDTO(long Id, string Name, ICollection<CarIssue> Issues)
     { }
 }
 
-public record CreateCarDTO(long OwnerId, string Name);
+public record CreateCarDTO(string OwnerId, string Name);

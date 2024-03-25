@@ -1,5 +1,7 @@
 
 using System.Text.Json.Serialization;
+using Backend.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddDbContext<CarIssueContext>(opt => opt.UseSqlite("Data Source=carIssuesDatabase.db"));
+builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite("Data Source=carIssuesDatabase.db"));
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt =>
+{
+    opt.Password = new PasswordOptions
+    {
+        RequireDigit = false,
+        RequiredUniqueChars = 0,
+        RequireNonAlphanumeric = false,
+        RequireUppercase = false,
+        RequireLowercase = false,
+    };
+}).AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddCors(opt =>
 {
     opt.AddDefaultPolicy(policy =>
@@ -27,6 +42,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors();
+app.MapIdentityApi<ApplicationUser>();
 app.MapControllers();
 app.Run();
 

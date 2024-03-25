@@ -2,17 +2,26 @@ using Microsoft.AspNetCore.Mvc;
 
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
-[Route("car")]
-public class CarController(CarIssueContext carIssueContext) : ControllerBase
+[Route("/car")]
+[Authorize]
+public class CarController(ApplicationDbContext carIssueContext, UserManager<ApplicationUser> userManager) : ControllerBase
 {
-    private readonly CarIssueContext carIssueContext = carIssueContext;
+    private readonly ApplicationDbContext carIssueContext = carIssueContext;
+    private readonly UserManager<ApplicationUser> userManager = userManager;
 
     [HttpPost]
     public async Task<ActionResult<CarDTO>> AddCar(CreateCarDTO createCarDTO)
     {
-        var user = await carIssueContext.Users.Include(x => x.Cars)
-            .FirstOrDefaultAsync(x => x.Id == createCarDTO.OwnerId);
+        var userId = userManager.GetUserId(User);
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+
+        var user = await carIssueContext.Users.Include(x => x.Cars).FirstOrDefaultAsync(x => x.Id == userId);
 
         if (user != null)
         {

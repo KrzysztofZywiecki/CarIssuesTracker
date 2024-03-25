@@ -5,19 +5,19 @@ using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 [Route("user")]
-public class UserController(CarIssueContext carIssueContext) : ControllerBase
+public class UserController(ApplicationDbContext carIssueContext) : ControllerBase
 {
-    private readonly CarIssueContext carIssueContext = carIssueContext;
+    private readonly ApplicationDbContext carIssueContext = carIssueContext;
 
     [HttpGet("all")]
-    public async Task<User[]> GetUsers()
+    public async Task<ApplicationUser[]> GetUsers()
     {
-        var users = await carIssueContext.Users.ToArrayAsync();
+        var users = await carIssueContext.Users.Include(x => x.Cars).ToArrayAsync();
         return users;
     }
 
     [HttpGet("{Id}")]
-    public async Task<ActionResult<UserDTO>> GetUser(long Id)
+    public async Task<ActionResult<UserDTO>> GetUser(string Id)
     {
         var user = await carIssueContext.Users.FindAsync(Id);
 
@@ -30,16 +30,5 @@ public class UserController(CarIssueContext carIssueContext) : ControllerBase
             return NotFound();
         }
 
-    }
-
-    [HttpPost]
-    public async Task<UserDTO> CreateUser(CreateUserDTO createUserDTO)
-    {
-        var user = new User(Id: 0, Username: createUserDTO.Username, Cars: []);
-
-        await carIssueContext.Users.AddAsync(user);
-        await carIssueContext.SaveChangesAsync();
-
-        return new UserDTO(user);
     }
 }

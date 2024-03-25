@@ -1,14 +1,12 @@
-using backend.Migrations;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [Route("issues")]
 public class CarIssuesController : ControllerBase
 {
-    private readonly CarIssueContext carIssueContext;
+    private readonly ApplicationDbContext carIssueContext;
 
-    public CarIssuesController(CarIssueContext context)
+    public CarIssuesController(ApplicationDbContext context)
     {
         carIssueContext = context;
     }
