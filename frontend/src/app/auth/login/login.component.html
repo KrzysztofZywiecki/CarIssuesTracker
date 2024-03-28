@@ -1,3 +1,36 @@
-<p>login works!</p>
+<h2 class="text">Log in</h2>
+<form>
+  <mat-form-field>
+    <mat-label>E-mail</mat-label>
+    <input
+      matInput
+      [(ngModel)]="loginModel.email"
+      required="true"
+      name="email"
+      type="email"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      [(ngModel)]="loginModel.password"
+      required="true"
+      name="password"
+      type="password"
+    />
+  </mat-form-field>
 
-<button (click)="logIn()">Get user</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="logIn()"
+    class="center-element"
+  >
+    Sign in
+  </button>
+  <p class="center-element">
+    <span class="text">Don't have an account? </span
+    ><a routerLink="../register" class="link">Sign up</a>
+  </p>
+</form>

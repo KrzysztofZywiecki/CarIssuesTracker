@@ -1,0 +1,26 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+form > *:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.center-element {
+  align-self: center;
+}
+
+@mixin color($theme) {
+  .text {
+    color: mat.get-theme-color($theme, foreground, text);
+  }
+
+  .link {
+    color: mat.get-theme-color($theme, accent, text);
+  }
+}

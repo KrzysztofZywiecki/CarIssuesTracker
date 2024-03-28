@@ -1,0 +1,11 @@
+.centered-container {
+  position: absolute;
+  width: min(90vw, 480px);
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+}
+
+.form-container {
+  padding: 1.5em;
+}

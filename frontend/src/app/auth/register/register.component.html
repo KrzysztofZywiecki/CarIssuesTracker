@@ -1,1 +1,73 @@
-<p>register works!</p>
+<h2 class="text">Register</h2>
+<form>
+  <mat-form-field>
+    <mat-label>E-mail</mat-label>
+    <input
+      matInput
+      [(ngModel)]="registerModel.email"
+      required="true"
+      name="email"
+      type="email"
+      email="true"
+      #email="ngModel"
+    />
+    <mat-error *ngIf="email.errors?.['required']"
+      >E-mail is required.</mat-error
+    >
+    <mat-error *ngIf="email.errors?.['email']">E-mail is invalid.</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Display name</mat-label>
+    <input
+      matInput
+      [(ngModel)]="registerModel.username"
+      required="true"
+      name="username"
+      type="text"
+      #username="ngModel"
+    />
+    <mat-error *ngIf="username.errors?.['required']"
+      >Username is required</mat-error
+    >
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      [(ngModel)]="registerModel.password"
+      required="true"
+      name="password"
+      type="password"
+      #password="ngModel"
+    />
+    <mat-error *ngIf="username.errors?.['required']"
+      >Password is required</mat-error
+    >
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Confirm password</mat-label>
+    <input
+      matInput
+      [(ngModel)]="registerModel.confirmPassword"
+      required="true"
+      name="confirm_password"
+      type="password"
+      matchingPasswords
+      [passwordField]="password"
+      #repeatPassword="ngModel"
+    />
+    <mat-error *ngIf="repeatPassword.errors?.['required']"
+      >Please confirm password</mat-error
+    >
+    <mat-error *ngIf="repeatPassword.errors?.['notMatching']"
+      >Passwords don't match</mat-error
+    >
+  </mat-form-field>
+  <button mat-flat-button color="primary" class="center-element">
+    Sign up
+  </button>
+  <p class="center-element">
+    <span class="text">Already have an account? </span
+    ><a routerLink="../login" class="link">Sign in</a>
+  </p>
+</form>
