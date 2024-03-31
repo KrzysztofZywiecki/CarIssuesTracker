@@ -1,5 +1,5 @@
 <h2 class="text">Log in</h2>
-<form>
+<form #form="ngForm">
   <mat-form-field>
     <mat-label>E-mail</mat-label>
     <input
@@ -8,7 +8,11 @@
       required="true"
       name="email"
       type="email"
+      email="true"
+      #email="ngModel"
     />
+    <mat-error *ngIf="email.errors?.['required']">E-mail is required</mat-error>
+    <mat-error *ngIf="email.errors?.['email']">E-mail is invalid</mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Password</mat-label>
@@ -18,7 +22,11 @@
       required="true"
       name="password"
       type="password"
+      #password="ngModel"
     />
+    <mat-error *ngIf="password.errors?.['required']"
+      >Password is required</mat-error
+    >
   </mat-form-field>
 
   <button
@@ -26,6 +34,7 @@
     color="primary"
     (click)="logIn()"
     class="center-element"
+    [disabled]="form.invalid"
   >
     Sign in
   </button>

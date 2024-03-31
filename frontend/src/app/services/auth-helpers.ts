@@ -14,10 +14,13 @@ export function authGuard(
 ): Observable<boolean | UrlTree> | boolean | UrlTree {
   const router = inject(Router);
   const authService = inject(AuthService);
-  console.log(authService.loginState);
-  if (authService.loginState) {
+  if (authService.isLoggedIn()) {
     return true;
   }
-
   return router.parseUrl("/auth");
 }
+
+export type RegisterSuccess = { status: 0 };
+export type RegisterFailure = { status: 1; messages: string[] };
+
+export type RegisterStatus = RegisterSuccess | RegisterFailure;

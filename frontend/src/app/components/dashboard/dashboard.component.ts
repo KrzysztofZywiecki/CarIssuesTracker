@@ -8,6 +8,8 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterOutlet } from "@angular/router";
 import { NavbarComponent } from "../navbar/navbar.component";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment.development";
 
 @Component({
   selector: "app-dashboard",
@@ -27,9 +29,14 @@ import { NavbarComponent } from "../navbar/navbar.component";
   styleUrl: "./dashboard.component.scss",
 })
 export class DashboardComponent {
+  constructor(private http: HttpClient) {}
   greetingMessage = "";
   events: string[] = [];
   opened = signal(false);
+
+  getUser() {
+    this.http.get(`${environment.apiUrl}/user/userInfo`).subscribe(console.log);
+  }
 
   toggleSidebar() {
     this.opened.update((value) => !value);

@@ -10,6 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-login",
@@ -22,6 +23,7 @@ import { MatButtonModule } from "@angular/material/button";
     MatInputModule,
     MatCardModule,
     MatButtonModule,
+    MatSnackBarModule,
   ],
   templateUrl: "./login.component.html",
   styleUrl: "../auth-styles/style.scss",
@@ -30,10 +32,19 @@ export class LoginComponent {
   constructor(
     private _authService: AuthService,
     private _router: Router,
-    private _userService: UserService
+    private _snackBar: MatSnackBar
   ) {}
 
   loginModel: LoginDto = { email: "", password: "" };
 
-  logIn() {}
+  logIn() {
+    this._authService.logIn(this.loginModel).subscribe((shouldRedirect) => {
+      if (!shouldRedirect) {
+        const snackbarRef = this._snackBar.open("Invalid E-mail or password");
+        snackbarRef._dismissAfter(5000);
+      } else {
+        this._router.navigate(["/dashboard"]);
+      }
+    });
+  }
 }

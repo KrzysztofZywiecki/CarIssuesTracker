@@ -8,6 +8,7 @@ import { MatInputModule } from "@angular/material/input";
 import { RouterLink } from "@angular/router";
 import { RegisterDto } from "../../models/register-dto";
 import { MatchingPasswordsDirective } from "../helpers/matching-passwords.directive";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-register",
@@ -26,10 +27,14 @@ import { MatchingPasswordsDirective } from "../helpers/matching-passwords.direct
   styleUrl: "../auth-styles/style.scss",
 })
 export class RegisterComponent {
+  constructor(private _authService: AuthService) {}
   registerModel: RegisterDto = {
     email: "",
-    username: "",
     password: "",
     confirmPassword: "",
   };
+
+  register() {
+    this._authService.register(this.registerModel).subscribe(console.log);
+  }
 }

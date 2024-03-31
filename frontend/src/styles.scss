@@ -67,7 +67,7 @@ body {
   background-color: mat.get-theme-color(
     customTheme.$dark-theme,
     background,
-    tooltip
+    background
   );
   overflow: hidden;
   display: inline-block;
@@ -77,12 +77,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-@media (prefers-dark-theme: light) {
+@media (prefers-color-scheme: light) {
   body {
     background-color: mat.get-theme-color(
       customTheme.$light-theme,
       background,
-      tooltip
+      background
     );
   }
 }

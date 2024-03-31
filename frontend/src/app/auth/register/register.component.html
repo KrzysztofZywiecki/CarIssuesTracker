@@ -1,5 +1,5 @@
 <h2 class="text">Register</h2>
-<form>
+<form matchingPasswords #form="ngForm">
   <mat-form-field>
     <mat-label>E-mail</mat-label>
     <input
@@ -17,20 +17,6 @@
     <mat-error *ngIf="email.errors?.['email']">E-mail is invalid.</mat-error>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Display name</mat-label>
-    <input
-      matInput
-      [(ngModel)]="registerModel.username"
-      required="true"
-      name="username"
-      type="text"
-      #username="ngModel"
-    />
-    <mat-error *ngIf="username.errors?.['required']"
-      >Username is required</mat-error
-    >
-  </mat-form-field>
-  <mat-form-field>
     <mat-label>Password</mat-label>
     <input
       matInput
@@ -40,7 +26,7 @@
       type="password"
       #password="ngModel"
     />
-    <mat-error *ngIf="username.errors?.['required']"
+    <mat-error *ngIf="password.errors?.['required']"
       >Password is required</mat-error
     >
   </mat-form-field>
@@ -50,10 +36,8 @@
       matInput
       [(ngModel)]="registerModel.confirmPassword"
       required="true"
-      name="confirm_password"
+      name="confirmPassword"
       type="password"
-      matchingPasswords
-      [passwordField]="password"
       #repeatPassword="ngModel"
     />
     <mat-error *ngIf="repeatPassword.errors?.['required']"
@@ -63,7 +47,13 @@
       >Passwords don't match</mat-error
     >
   </mat-form-field>
-  <button mat-flat-button color="primary" class="center-element">
+  <button
+    mat-flat-button
+    color="primary"
+    class="center-element"
+    [disabled]="form.invalid"
+    (click)="register()"
+  >
     Sign up
   </button>
   <p class="center-element">

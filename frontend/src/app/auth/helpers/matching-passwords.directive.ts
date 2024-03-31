@@ -19,13 +19,15 @@ import {
   standalone: true,
 })
 export class MatchingPasswordsDirective implements Validator {
-  constructor() {}
-
-  @Input("passwordField") passwordField: NgModel | null = null;
-
   validate(control: AbstractControl<any, any>): ValidationErrors | null {
-    return this.passwordField?.model !== control.value
-      ? { notMatching: true }
-      : null;
+    const password = control.get("password");
+    const confirmPassword = control.get("confirmPassword");
+    if (password?.value !== confirmPassword?.value) {
+      confirmPassword?.setErrors({ notMatching: true });
+      return { notMatching: true };
+    } else {
+      confirmPassword?.setErrors(null);
+      return null;
+    }
   }
 }

@@ -6,6 +6,7 @@ import { authGuard } from "./services/auth-helpers";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { LoginComponent } from "./auth/login/login.component";
 import { RegisterComponent } from "./auth/register/register.component";
+import { FleetComponent } from "./components/fleet/fleet.component";
 
 export const routes: Routes = [
   {
@@ -21,9 +22,10 @@ export const routes: Routes = [
     path: "dashboard",
     component: DashboardComponent,
     children: [
+      { path: "my-fleet", component: FleetComponent },
       { path: "issues", component: IssuesListComponent },
       { path: "summary", component: IssuesSummaryComponent },
-      { path: "**", redirectTo: "issues" },
+      { path: "**", redirectTo: "my-fleet" },
     ],
     canActivate: [authGuard],
   },
