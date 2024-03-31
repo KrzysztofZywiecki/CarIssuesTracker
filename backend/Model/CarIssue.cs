@@ -2,25 +2,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models;
 
-public class CarIssue(long Id, string Description, decimal? RepairCost, DateTime CreateDateTime, DateTime? RepairDateTime)
+public class CarIssue()
 {
-    public CarIssue() : this(
-        Id: 0,
-        Description: "",
-        RepairCost: null,
-        CreateDateTime: DateTime.Now,
-        RepairDateTime: null)
-    { }
+    public long Id { get; set; }
+    public string Description { get; set; } = "";
 
-    public long Id { get; set; } = Id;
-    public string Description { get; init; } = Description;
+    public DateTime CreateDateTime { get; set; }
 
-    public DateTime CreateDateTime { get; init; } = CreateDateTime;
-
-    public DateTime? RepairDateTime { get; set; } = RepairDateTime;
+    public DateTime? RepairDateTime { get; set; }
 
     [Column(TypeName = "decimal(8, 2)")]
-    public decimal? RepairCost { get; set; } = RepairCost;
+    public decimal? RepairCost { get; set; }
 };
 
 public record CreateCarIssueDTO(string Description, long CarId);

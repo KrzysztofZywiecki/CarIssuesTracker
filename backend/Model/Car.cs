@@ -4,16 +4,14 @@ using Microsoft.AspNetCore.Components;
 
 namespace Backend.Models;
 
-public class Car(long Id, string Name, ICollection<CarIssue> Issues)
+public class Car()
 {
-    public Car() : this(Id: 0, Name: "", Issues: []) { }
-
-    public long Id { get; init; } = Id;
-    public string Name { get; set; } = Name;
-    public ICollection<CarIssue> Issues { get; init; } = Issues;
+    public Guid Id { get; set; }
+    public string Name { get; set; } = "";
+    public ICollection<CarIssue> Issues { get; init; } = [];
 }
 
-public record CarDTO(long Id, string Name, ICollection<CarIssue> Issues)
+public record CarDTO(Guid Id, string Name, ICollection<CarIssue> Issues)
 {
     public CarDTO(Car other) : this(
         Id: other.Id,

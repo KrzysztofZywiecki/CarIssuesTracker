@@ -1,6 +1,8 @@
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
+namespace Backend.Controllers;
+
 [Route("issues")]
 public class CarIssuesController : ControllerBase
 {

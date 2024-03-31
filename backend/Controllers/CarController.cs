@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
+namespace Backend.Controllers;
+
 [Route("/car")]
 [Authorize]
 public class CarController(ApplicationDbContext carIssueContext, UserManager<ApplicationUser> userManager) : ControllerBase
@@ -25,7 +27,7 @@ public class CarController(ApplicationDbContext carIssueContext, UserManager<App
 
         if (user != null)
         {
-            var car = new Car(0, createCarDTO.Name, []);
+            var car = new Car { Name = createCarDTO.Name };
             user.Cars.Add(car);
             await carIssueContext.SaveChangesAsync();
             return Ok(car);

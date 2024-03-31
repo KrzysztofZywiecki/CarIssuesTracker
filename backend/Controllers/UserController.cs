@@ -2,24 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Backend.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
+namespace Backend.Controllers;
 
 [Route("user")]
-public class UserController(ApplicationDbContext carIssueContext) : ControllerBase
+[Authorize]
+public class UserController(UserManager<ApplicationUser> userManager) : ControllerBase
 {
-    private readonly ApplicationDbContext carIssueContext = carIssueContext;
+    readonly private UserManager<ApplicationUser> userManager = userManager;
 
-    [HttpGet("all")]
-    public async Task<ApplicationUser[]> GetUsers()
+    [HttpGet]
+    [Route("info")]
+    public async Task<ActionResult<UserDTO>> GetUserInfo()
     {
-        var users = await carIssueContext.Users.Include(x => x.Cars).ToArrayAsync();
-        return users;
-    }
-
-    [HttpGet("{Id}")]
-    public async Task<ActionResult<UserDTO>> GetUser(string Id)
-    {
-        var user = await carIssueContext.Users.FindAsync(Id);
+        var user = await userManager.GetUserAsync(User);
 
         if (user != null)
         {

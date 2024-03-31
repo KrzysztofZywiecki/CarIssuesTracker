@@ -2,14 +2,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Models;
 
-public class ApplicationUser(ICollection<Car> Cars) : IdentityUser
+public class ApplicationUser() : IdentityUser
 {
-    public ApplicationUser() : this(Cars: []) { }
-
-    public ICollection<Car> Cars { get; init; } = Cars;
+    public ICollection<Car> Cars { get; set; } = [];
 }
-
-public record CreateUserDTO(string Username);
 
 public record UserDTO(string? Username)
 {
