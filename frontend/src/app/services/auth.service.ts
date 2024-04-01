@@ -18,6 +18,7 @@ import {
   RegisterSuccess,
   RegisterFailure,
 } from "./auth-helpers";
+import { RefreshResponse } from "../models/refresh-response";
 
 @Injectable({
   providedIn: "root",
@@ -67,20 +68,37 @@ export class AuthService {
           return { status: 0 } as RegisterSuccess;
         }),
         catchError((err) => {
-          console.log(err);
           return of({
             status: 1,
             messages: err.error.errors,
           } as RegisterFailure);
         })
       );
-
     return response;
   }
 
   logOut(): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/logout`, {
-      refreshToken: this._refreshToken,
-    });
+    return this.http.post<void>(`${environment.apiUrl}/logOut`, {}).pipe(
+      tap((_) => {
+        this._refreshToken = null;
+        this._accessToken = null;
+        this._tokenType = null;
+      })
+    );
+  }
+
+  refreshTokens(): Observable<void> {
+    return this.http
+      .post<RefreshResponse>(`${environment.apiUrl}/refresh`, {
+        refreshToken: this._refreshToken,
+      })
+      .pipe(
+        tap((response) => {
+          this._refreshToken = response.refreshToken;
+          this._accessToken = response.accessToken;
+          this._tokenType = response.tokenType;
+        }),
+        map((_) => {})
+      );
   }
 }

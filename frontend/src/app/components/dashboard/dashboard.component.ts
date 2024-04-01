@@ -35,7 +35,7 @@ export class DashboardComponent {
   opened = signal(false);
 
   getUser() {
-    this.http.get(`${environment.apiUrl}/user/userInfo`).subscribe(console.log);
+    this.http.get(`${environment.apiUrl}/user/info`).subscribe(console.log);
   }
 
   toggleSidebar() {

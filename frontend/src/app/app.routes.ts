@@ -27,7 +27,7 @@ export const routes: Routes = [
       { path: "summary", component: IssuesSummaryComponent },
       { path: "**", redirectTo: "my-fleet" },
     ],
-    canActivate: [authGuard],
+    canActivateChild: [authGuard],
   },
   { path: "**", redirectTo: "dashboard" },
 ];

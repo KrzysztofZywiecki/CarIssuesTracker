@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
-import { UserService } from "../../services/user.service";
 import { RouterLink } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
@@ -10,7 +9,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { SnackBarService } from "../../services/snack-bar.service";
 
 @Component({
   selector: "app-login",
@@ -23,7 +22,6 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
     MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatSnackBarModule,
   ],
   templateUrl: "./login.component.html",
   styleUrl: "../auth-styles/style.scss",
@@ -32,7 +30,7 @@ export class LoginComponent {
   constructor(
     private _authService: AuthService,
     private _router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBarService: SnackBarService
   ) {}
 
   loginModel: LoginDto = { email: "", password: "" };
@@ -40,8 +38,7 @@ export class LoginComponent {
   logIn() {
     this._authService.logIn(this.loginModel).subscribe((shouldRedirect) => {
       if (!shouldRedirect) {
-        const snackbarRef = this._snackBar.open("Invalid E-mail or password");
-        snackbarRef._dismissAfter(5000);
+        this._snackBarService.displaySnackBar("Invalid E-mail or password");
       } else {
         this._router.navigate(["/dashboard"]);
       }

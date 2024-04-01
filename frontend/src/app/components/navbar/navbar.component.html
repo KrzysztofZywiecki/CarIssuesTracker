@@ -30,7 +30,13 @@
     tabindex="-1"
   >
     <div class="nav-link">
-      <mat-icon> directions_car</mat-icon><span>Link2</span>
+      <mat-icon>directions_car</mat-icon><span>Link2</span>
     </div>
   </mat-list-item>
+  <div class="spacer"></div>
+  <mat-list-item (click)="logOut()" tabindex="-1">
+    <div class="nav-link">
+      <mat-icon>logout</mat-icon><span>Log out</span>
+    </div></mat-list-item
+  >
 </mat-nav-list>

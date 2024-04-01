@@ -10,9 +10,16 @@ public class AuthController : ControllerBase
 {
     [Authorize]
     [HttpPost("/logOut")]
-    public async Task LogOut([FromServices] SignInManager<ApplicationUser> signInManager)
+    public async Task<ActionResult> LogOut([FromServices] SignInManager<ApplicationUser> signInManager,
+    [FromBody] object empty)
     {
-        await signInManager.SignOutAsync();
+        if (empty != null)
+        {
+            var temp = signInManager.IsSignedIn(User);
+            await signInManager.SignOutAsync();
+            return NoContent();
+        }
+        return Unauthorized();
     }
 
 }
