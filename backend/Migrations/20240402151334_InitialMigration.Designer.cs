@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240329112936_ChangedInitToGetSet")]
-    partial class ChangedInitToGetSet
+    [Migration("20240402151334_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,6 +90,7 @@ namespace backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -105,9 +106,9 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Backend.Models.CarIssue", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("CarId")
                         .HasColumnType("TEXT");
@@ -262,9 +263,13 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Car", b =>
                 {
-                    b.HasOne("Backend.Models.ApplicationUser", null)
+                    b.HasOne("Backend.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Cars")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Backend.Models.CarIssue", b =>

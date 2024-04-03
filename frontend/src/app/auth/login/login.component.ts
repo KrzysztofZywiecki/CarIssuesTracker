@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { RouterLink } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { LoginDto } from "../../models/login-dto";
+import { LoginDTO } from "../../models/login-dto";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatCardModule } from "@angular/material/card";
@@ -33,7 +33,7 @@ export class LoginComponent {
     private _snackBarService: SnackBarService
   ) {}
 
-  loginModel: LoginDto = { email: "", password: "" };
+  loginModel: LoginDTO = { email: "", password: "" };
 
   logIn() {
     this._authService.logIn(this.loginModel).subscribe((shouldRedirect) => {

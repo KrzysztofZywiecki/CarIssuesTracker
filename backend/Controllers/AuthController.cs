@@ -8,18 +8,15 @@ namespace Backend.Controllers;
 
 public class AuthController : ControllerBase
 {
-    [Authorize]
     [HttpPost("/logOut")]
-    public async Task<ActionResult> LogOut([FromServices] SignInManager<ApplicationUser> signInManager,
-    [FromBody] object empty)
+    public async Task<ActionResult> LogOut([FromServices] SignInManager<ApplicationUser> signInManager)
     {
-        if (empty != null)
+        var signedIn = signInManager.IsSignedIn(User);
+        if (signedIn)
         {
-            var temp = signInManager.IsSignedIn(User);
             await signInManager.SignOutAsync();
-            return NoContent();
         }
-        return Unauthorized();
+        return NoContent();
     }
 
 }

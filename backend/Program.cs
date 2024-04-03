@@ -1,6 +1,7 @@
 
 using System.Text.Json.Serialization;
 using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite("Data Source=carIssuesDatabase.db"));
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SameOwnerPolicy", policy =>
+    {
+        policy.Requirements.Add(new SameAuthorRequirement());
+    });
+});
+builder.Services.AddSingleton<IAuthorizationHandler, CarOwnershipAuthorizationHandler>();
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt =>
 {
     opt.Password = new PasswordOptions
@@ -46,5 +54,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.MapIdentityApi<ApplicationUser>();
 app.MapControllers();
+app.UseAuthorization();
 app.Run();
 

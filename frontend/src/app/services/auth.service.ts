@@ -10,8 +10,8 @@ import {
   tap,
 } from "rxjs";
 import { environment } from "../../environments/environment.development";
-import { LoginDto } from "../models/login-dto";
-import { RegisterDto } from "../models/register-dto";
+import { LoginDTO } from "../models/login-dto";
+import { RegisterDTO } from "../models/register-dto";
 import { LoginResponse } from "../models/login-response";
 import {
   RegisterStatus,
@@ -24,11 +24,13 @@ import { RefreshResponse } from "../models/refresh-response";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this._accessToken = localStorage.getItem("accessToken");
+    this._refreshToken = localStorage.getItem("refreshToken");
+  }
 
   private _accessToken: string | null = null;
   private _refreshToken: string | null = null;
-  private _tokenType: string | null = null;
 
   isLoggedIn(): boolean {
     return this._accessToken !== null;
@@ -38,14 +40,35 @@ export class AuthService {
     return this._accessToken;
   }
 
-  logIn(loginInfo: LoginDto): Observable<boolean> {
+  get refreshToken(): string | null {
+    return this._refreshToken;
+  }
+
+  set accessToken(value: string | null) {
+    this._accessToken = value;
+    if (value !== null) {
+      localStorage.setItem("accessToken", value);
+    } else {
+      localStorage.removeItem("accessToken");
+    }
+  }
+
+  set refreshToken(value: string | null) {
+    this._refreshToken = value;
+    if (value !== null) {
+      localStorage.setItem("refreshRoken", value);
+    } else {
+      localStorage.removeItem("refreshRoken");
+    }
+  }
+
+  logIn(loginInfo: LoginDTO): Observable<boolean> {
     const response = this.http
       .post<LoginResponse>(`${environment.apiUrl}/login`, loginInfo)
       .pipe(
         tap((response) => {
-          this._accessToken = response.accessToken;
-          this._refreshToken = response.refreshToken;
-          this._tokenType = response.tokenType;
+          this.accessToken = response.accessToken;
+          this.refreshToken = response.refreshToken;
         }),
         map((_) => true),
         catchError((err) => of(false))
@@ -54,7 +77,7 @@ export class AuthService {
     return response;
   }
 
-  register(registerInfo: RegisterDto): Observable<RegisterStatus> {
+  register(registerInfo: RegisterDTO): Observable<RegisterStatus> {
     if (registerInfo.password !== registerInfo.confirmPassword) {
       return of({ status: 1, messages: ["Passwords don't match"] });
     }
@@ -80,9 +103,8 @@ export class AuthService {
   logOut(): Observable<void> {
     return this.http.post<void>(`${environment.apiUrl}/logOut`, {}).pipe(
       tap((_) => {
-        this._refreshToken = null;
-        this._accessToken = null;
-        this._tokenType = null;
+        this.refreshToken = null;
+        this.accessToken = null;
       })
     );
   }
@@ -90,13 +112,12 @@ export class AuthService {
   refreshTokens(): Observable<void> {
     return this.http
       .post<RefreshResponse>(`${environment.apiUrl}/refresh`, {
-        refreshToken: this._refreshToken,
+        refreshToken: this.refreshToken,
       })
       .pipe(
         tap((response) => {
-          this._refreshToken = response.refreshToken;
-          this._accessToken = response.accessToken;
-          this._tokenType = response.tokenType;
+          this.refreshToken = response.refreshToken;
+          this.accessToken = response.accessToken;
         }),
         map((_) => {})
       );

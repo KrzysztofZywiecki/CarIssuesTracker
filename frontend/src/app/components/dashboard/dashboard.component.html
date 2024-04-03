@@ -7,11 +7,10 @@
   </mat-toolbar>
   <mat-sidenav-container class="container">
     <mat-sidenav #sidenav mode="over" [(opened)]="opened">
-      <app-navbar></app-navbar>
+      <app-navbar [sidepanelRef]="sidenav"></app-navbar>
     </mat-sidenav>
 
     <mat-sidenav-content class="content-container">
-      <button (click)="getUser()">Get user</button>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

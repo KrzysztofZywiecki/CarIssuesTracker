@@ -6,10 +6,10 @@ import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { Router, RouterLink } from "@angular/router";
-import { RegisterDto } from "../../models/register-dto";
+import { RegisterDTO } from "../../models/register-dto";
 import { MatchingPasswordsDirective } from "../helpers/matching-passwords.directive";
 import { AuthService } from "../../services/auth.service";
-import { LoginDto } from "../../models/login-dto";
+import { LoginDTO } from "../../models/login-dto";
 import { firstValueFrom, of, switchMap } from "rxjs";
 import { SnackBarService } from "../../services/snack-bar.service";
 
@@ -35,7 +35,7 @@ export class RegisterComponent {
     private _snackBarService: SnackBarService,
     private _router: Router
   ) {}
-  registerModel: RegisterDto = {
+  registerModel: RegisterDTO = {
     email: "",
     password: "",
     confirmPassword: "",
@@ -44,7 +44,7 @@ export class RegisterComponent {
   register() {
     this._authService.register(this.registerModel).subscribe((response) => {
       if (response.status === 0) {
-        const logInInfo: LoginDto = {
+        const logInInfo: LoginDTO = {
           email: this.registerModel.email,
           password: this.registerModel.password,
         };

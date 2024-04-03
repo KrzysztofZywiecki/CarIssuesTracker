@@ -11,6 +11,10 @@
   height: 100%;
 }
 
+.list-item-active * {
+  color: red;
+}
+
 .nav-link {
   display: flex;
   flex-direction: row;

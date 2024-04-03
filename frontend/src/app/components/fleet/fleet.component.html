@@ -1,1 +1,27 @@
-<p>fleet works!</p>
+<div class="container">
+  {{ carsObservable | async | json }}
+
+  <form #form="ngForm">
+    <mat-form-field>
+      <mat-label>Car name</mat-label>
+      <input
+        matInput
+        required="true"
+        name="carName"
+        [(ngModel)]="model.name"
+        #carName="ngModel"
+      />
+      <mat-error *ngIf="carName.errors?.['required']"
+        >E-mail is required</mat-error
+      >
+    </mat-form-field>
+    <button
+      mat-flat-button
+      color="success"
+      (click)="addNew()"
+      [disabled]="form.invalid"
+    >
+      Add new
+    </button>
+  </form>
+</div>
