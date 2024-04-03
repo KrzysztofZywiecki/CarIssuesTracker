@@ -119,7 +119,14 @@ export class AuthService {
           this.refreshToken = response.refreshToken;
           this.accessToken = response.accessToken;
         }),
-        map((_) => {})
+        map(
+          (_) => {},
+          catchError((error) => {
+            this.refreshToken = null;
+            this.accessToken = null;
+            throw error;
+          })
+        )
       );
   }
 }

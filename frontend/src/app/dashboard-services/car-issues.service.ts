@@ -1,8 +1,6 @@
 import { Injectable, Signal, WritableSignal, signal } from "@angular/core";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class CarIssuesService {
   private _issuesList: WritableSignal<number[]> = signal([1, 2, 3]);
 

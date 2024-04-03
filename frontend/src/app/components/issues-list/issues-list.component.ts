@@ -1,5 +1,5 @@
 import { Component, OnInit, Signal } from "@angular/core";
-import { CarIssuesService } from "../../services/car-issues.service";
+import { CarIssuesService } from "../../dashboard-services/car-issues.service";
 import { CommonModule } from "@angular/common";
 
 @Component({

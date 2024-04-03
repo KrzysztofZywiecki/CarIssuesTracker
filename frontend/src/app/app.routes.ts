@@ -7,6 +7,8 @@ import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { LoginComponent } from "./auth/login/login.component";
 import { RegisterComponent } from "./auth/register/register.component";
 import { FleetComponent } from "./components/fleet/fleet.component";
+import { CarsService } from "./dashboard-services/cars.service";
+import { CarIssuesService } from "./dashboard-services/car-issues.service";
 
 export const routes: Routes = [
   {
@@ -21,6 +23,7 @@ export const routes: Routes = [
   {
     path: "dashboard",
     component: DashboardComponent,
+    providers: [CarsService, CarIssuesService],
     children: [
       { path: "my-fleet", component: FleetComponent },
       { path: "issues", component: IssuesListComponent },
