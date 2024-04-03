@@ -1,5 +1,5 @@
 <div class="container">
-  {{ carsObservable | async | json }}
+  {{ carsSignal() | json }}
 
   <form #form="ngForm">
     <mat-form-field>

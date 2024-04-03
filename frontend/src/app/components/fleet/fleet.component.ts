@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { CarsService } from "../../services/cars.service";
+import { Component, OnInit, Signal } from "@angular/core";
+import { CarsService } from "../../dashboard-services/cars.service";
 import { CarDTO } from "../../models/car-dto";
 import { Observable } from "rxjs";
 import { CommonModule } from "@angular/common";
@@ -27,7 +27,9 @@ import { CreateCarDTO } from "../../models/create-car-dto";
 export class FleetComponent implements OnInit {
   constructor(private _carsService: CarsService) {}
 
-  carsObservable: Observable<CarDTO[]> | null = null;
+  // carsObservable: Observable<CarDTO[]> | null = null;
+
+  carsSignal: Signal<CarDTO[] | null> = this._carsService.cars;
 
   model: CreateCarDTO = {
     name: "",
@@ -38,6 +40,6 @@ export class FleetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carsObservable = this._carsService.getCars();
+    // this.carsObservable = this._carsService.getCars();
   }
 }
