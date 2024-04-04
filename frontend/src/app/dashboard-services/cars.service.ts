@@ -18,50 +18,19 @@ import { CreateCarDTO } from "../models/create-car-dto";
 export class CarsService {
   constructor(private _http: HttpClient) {}
 
-  private _carsSubject: BehaviorSubject<Observable<CarDTO[]> | null> =
-    new BehaviorSubject<Observable<CarDTO[]> | null>(null);
-
-  public get carsObservable(): Observable<CarDTO[] | null> {
-    return this._carsSubject.asObservable().pipe(
-      debounceTime(1000),
-      switchMap((value) => {
-        if (value != null) {
-          return value;
-        } else {
-          return of(null);
-        }
-      }),
-      shareReplay(1)
-    );
+  getCars(): Observable<CarDTO[]> {
+    return this._http.get<CarDTO[]>(`${environment.apiUrl}/car/getAll`);
   }
 
-  getCars() {
-    this._carsSubject.next(
-      this._http.get<CarDTO[]>(`${environment.apiUrl}/car/getAll`)
-    );
+  getCarIssues(carId: string): Observable<any> {
+    return this._http.get(`${environment.apiUrl}/car/${carId}`);
   }
 
-  getCarIssues(carId: string): void {
-    this._http.get(`${environment.apiUrl}/car/${carId}`).subscribe((value) => {
-      console.log(value);
-    });
+  createCar(createCarDTO: CreateCarDTO): Observable<void> {
+    return this._http.post<void>(`${environment.apiUrl}/car`, createCarDTO);
   }
 
-  createCar(createCarDTO: CreateCarDTO): void {
-    this._http
-      .post<CarDTO>(`${environment.apiUrl}/car`, createCarDTO)
-      .pipe(
-        tap((value) => console.log("Created car", value)),
-        delay(1000)
-      )
-      .subscribe(() => {
-        this.getCars();
-      });
-  }
-
-  deleteCar(carId: string): void {
-    this._http.delete(`${environment.apiUrl}/car/${carId}`).subscribe(() => {
-      this.getCars();
-    });
+  deleteCar(carId: string): Observable<void> {
+    return this._http.delete<void>(`${environment.apiUrl}/car/${carId}`);
   }
 }

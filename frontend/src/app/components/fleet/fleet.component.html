@@ -1,4 +1,4 @@
-@if(carsObservable | async; as carsList) {
+@if(carsList; as carsList) {
 <div class="container">
   @for(carInfo of carsList; track carInfo.id) {
   <mat-card>

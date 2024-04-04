@@ -11,7 +11,7 @@ import { MatInputModule } from "@angular/material/input";
 import { CreateCarDTO } from "../../models/create-car-dto";
 import { RouterLink } from "@angular/router";
 import { ConfirmDeleteComponent } from "../confirm-delete/confirm-delete.component";
-import { Observable } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 @Component({
@@ -32,22 +32,31 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
   styleUrl: "./fleet.component.scss",
 })
 export class FleetComponent implements OnInit {
-  constructor(private _carsService: CarsService, private dialog: MatDialog) {
-    this.carsObservable = this._carsService.carsObservable;
-  }
+  constructor(private _carsService: CarsService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this._carsService.getCars();
+    this._carsService.getCars().subscribe((value) => {
+      this.carsList = value;
+    });
   }
 
-  carsObservable: Observable<CarDTO[] | null>;
+  carsList: CarDTO[] | null = null;
 
   model: CreateCarDTO = {
     name: "",
   };
 
   addNew() {
-    this._carsService.createCar(this.model);
+    this._carsService
+      .createCar(this.model)
+      .pipe(
+        switchMap((_) => {
+          return this._carsService.getCars();
+        })
+      )
+      .subscribe((value) => {
+        this.carsList = value;
+      });
   }
 
   deleteCar(id: string, carName: string) {
@@ -55,10 +64,19 @@ export class FleetComponent implements OnInit {
       data: { carName },
     });
     dialogRef.afterClosed().subscribe((value) => {
-      console.log(value);
       if (value === true) {
-        console.log("Deleting");
-        this._carsService.deleteCar(id);
+        this.carsList =
+          this.carsList?.filter((value) => value.id != id) ?? null;
+        this._carsService
+          .deleteCar(id)
+          .pipe(
+            switchMap((_) => {
+              return this._carsService.getCars();
+            })
+          )
+          .subscribe((value) => {
+            this.carsList = value;
+          });
       }
     });
   }
