@@ -1,6 +1,8 @@
-import { Component, OnInit, Signal } from "@angular/core";
+import { Component, Input, OnInit, Signal } from "@angular/core";
 import { CarIssuesService } from "../../dashboard-services/car-issues.service";
 import { CommonModule } from "@angular/common";
+import { ActivatedRoute } from "@angular/router";
+import { CarsService } from "../../dashboard-services/cars.service";
 
 @Component({
   selector: "app-issues-list",
@@ -10,12 +12,16 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./issues-list.component.scss",
 })
 export class IssuesListComponent implements OnInit {
-  issues: Signal<number[]>;
-  constructor(private issuesService: CarIssuesService) {
-    this.issues = this.issuesService.issuesList;
+  constructor(
+    private issuesService: CarIssuesService,
+    private carsService: CarsService
+  ) {}
+
+  @Input()
+  set id(carId: string) {
+    this.carsService.getCarIssues(carId);
+    console.log(carId);
   }
 
-  ngOnInit(): void {
-    console.log(this.issues());
-  }
+  ngOnInit(): void {}
 }

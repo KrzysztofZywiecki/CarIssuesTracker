@@ -26,7 +26,7 @@ export const routes: Routes = [
     providers: [CarsService, CarIssuesService],
     children: [
       { path: "my-fleet", component: FleetComponent },
-      { path: "issues", component: IssuesListComponent },
+      { path: "issues/:id", component: IssuesListComponent },
       { path: "summary", component: IssuesSummaryComponent },
       { path: "**", redirectTo: "my-fleet" },
     ],

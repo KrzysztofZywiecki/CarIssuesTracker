@@ -1,7 +1,7 @@
 import { Component, OnInit, Signal } from "@angular/core";
 import { CarsService } from "../../dashboard-services/cars.service";
 import { CarDTO } from "../../models/car-dto";
-import { Observable } from "rxjs";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -9,6 +9,10 @@ import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { CreateCarDTO } from "../../models/create-car-dto";
+import { RouterLink } from "@angular/router";
+import { ConfirmDeleteComponent } from "../confirm-delete/confirm-delete.component";
+import { Observable } from "rxjs";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 @Component({
   selector: "app-fleet",
@@ -20,16 +24,23 @@ import { CreateCarDTO } from "../../models/create-car-dto";
     MatInputModule,
     MatCardModule,
     MatButtonModule,
+    RouterLink,
+    MatDialogModule,
+    MatProgressBarModule,
   ],
   templateUrl: "./fleet.component.html",
   styleUrl: "./fleet.component.scss",
 })
 export class FleetComponent implements OnInit {
-  constructor(private _carsService: CarsService) {}
+  constructor(private _carsService: CarsService, private dialog: MatDialog) {
+    this.carsObservable = this._carsService.carsObservable;
+  }
 
-  // carsObservable: Observable<CarDTO[]> | null = null;
+  ngOnInit(): void {
+    this._carsService.getCars();
+  }
 
-  carsSignal: Signal<CarDTO[] | null> = this._carsService.cars;
+  carsObservable: Observable<CarDTO[] | null>;
 
   model: CreateCarDTO = {
     name: "",
@@ -39,7 +50,16 @@ export class FleetComponent implements OnInit {
     this._carsService.createCar(this.model);
   }
 
-  ngOnInit(): void {
-    // this.carsObservable = this._carsService.getCars();
+  deleteCar(id: string, carName: string) {
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: { carName },
+    });
+    dialogRef.afterClosed().subscribe((value) => {
+      console.log(value);
+      if (value === true) {
+        console.log("Deleting");
+        this._carsService.deleteCar(id);
+      }
+    });
   }
 }

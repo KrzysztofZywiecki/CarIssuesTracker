@@ -22,11 +22,7 @@
 }
 
 .content-container {
-  // background-color: mat.get-theme-color(
-  //   customTheme.$car-issues-tracker-theme,
-  //   primary,
-  //   default
-  // );
+  box-sizing: border-box;
   position: relative;
   padding: 1em;
 }
