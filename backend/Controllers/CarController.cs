@@ -43,7 +43,7 @@ public class CarController(ApplicationDbContext carIssueContext, UserManager<App
     [HttpGet]
     public async Task<ActionResult<CarDTO>> GetCar([FromRoute] Guid Id)
     {
-        var car = await carIssueContext.Cars.FindAsync(Id);
+        var car = await carIssueContext.Cars.Include(x => x.ApplicationUser).FirstAsync(x => x.Id == Id);
         if (car != null)
         {
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, car, "SameOwnerPolicy");
@@ -60,6 +60,29 @@ public class CarController(ApplicationDbContext carIssueContext, UserManager<App
         {
             return NotFound();
         }
+    }
+
+    [Route("{Id}")]
+    [HttpDelete]
+    public async Task<ActionResult> DeleteCar([FromRoute] Guid Id)
+    {
+        var car = await carIssueContext.Cars.Include(x => x.ApplicationUser).FirstAsync(x => x.Id == Id);
+        if (car != null)
+        {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, car, "SameOwnerPolicy");
+            if (authorizationResult.Succeeded)
+            {
+                carIssueContext.Cars.Remove(car);
+                await carIssueContext.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+        return NotFound();
+
     }
 
     [Route("getAll")]
