@@ -9,6 +9,7 @@ import { RegisterComponent } from "./auth/register/register.component";
 import { FleetComponent } from "./components/fleet/fleet.component";
 import { CarsService } from "./dashboard-services/cars.service";
 import { CarIssuesService } from "./dashboard-services/car-issues.service";
+import { ProfileComponent } from "./components/profile/profile.component";
 
 export const routes: Routes = [
   {
@@ -28,6 +29,7 @@ export const routes: Routes = [
       { path: "my-fleet", component: FleetComponent },
       { path: "issues/:id", component: IssuesListComponent },
       { path: "summary", component: IssuesSummaryComponent },
+      { path: "profile", component: ProfileComponent },
       { path: "**", redirectTo: "my-fleet" },
     ],
     canActivateChild: [authGuard],

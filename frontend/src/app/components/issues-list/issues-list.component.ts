@@ -19,8 +19,7 @@ export class IssuesListComponent implements OnInit {
 
   @Input()
   set id(carId: string) {
-    this.carsService.getCarIssues(carId);
-    console.log(carId);
+    this.carsService.getCarIssues(carId).subscribe(console.log);
   }
 
   ngOnInit(): void {}

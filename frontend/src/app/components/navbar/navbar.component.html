@@ -23,6 +23,19 @@
       <mat-icon>directions_car</mat-icon><span>Summary</span>
     </div>
   </a>
+  <a
+    mat-list-item
+    routerLink="profile"
+    routerLinkActive
+    #routerLinkActiveInstance3="routerLinkActive"
+    (click)="sidepanelRef.close()"
+    [class.list-item-active]="routerLinkActiveInstance3.isActive"
+    tabindex="-1"
+  >
+    <div class="nav-link">
+      <mat-icon>account_circle</mat-icon><span>Profile</span>
+    </div>
+  </a>
   <div class="spacer"></div>
   <mat-divider />
   <mat-list-item (click)="logOut()" tabindex="-1">

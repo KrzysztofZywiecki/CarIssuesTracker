@@ -11,9 +11,15 @@
 
     <mat-sidenav-content class="sidenav-content-container">
       <mat-toolbar class="toolbar" color="primary">
+        @if(showBackArrow) {
+        <button mat-icon-button (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        } @else {
         <button mat-icon-button (click)="toggleSidebar()">
           <mat-icon>menu</mat-icon>
         </button>
+        }
         <h1>Issue tracker</h1>
       </mat-toolbar>
       <div class="content-container">
