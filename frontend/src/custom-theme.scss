@@ -3,6 +3,7 @@
 @use "@angular/material" as mat;
 // Plus imports for other components in your app.
 @use "app/auth/auth-styles/style" as authTheme;
+@use "app/components/navbar/navbar.component" as navbarTheme;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -46,8 +47,10 @@ $dark-theme: mat.define-dark-theme(
 
 @include mat.all-component-themes($dark-theme);
 @include authTheme.color($dark-theme);
+@include navbarTheme.color($dark-theme);
 
 @media (prefers-color-scheme: light) {
   @include mat.all-component-colors($light-theme);
   @include authTheme.color($light-theme);
+  @include navbarTheme.color($light-theme);
 }

@@ -7,12 +7,7 @@
   flex-direction: column;
   justify-content: start;
   align-items: stretch;
-  width: min(90vw, 300px);
   height: 100%;
-}
-
-.list-item-active * {
-  color: red;
 }
 
 .nav-link {
@@ -24,4 +19,10 @@
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
+}
+
+@mixin color($theme) {
+  .list-item-active * {
+    color: mat.get-theme-color($theme, accent, text);
+  }
 }

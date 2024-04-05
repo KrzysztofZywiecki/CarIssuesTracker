@@ -14,7 +14,6 @@ export function authGuard(
 ): Observable<boolean | UrlTree> | boolean | UrlTree {
   const router = inject(Router);
   const authService = inject(AuthService);
-  console.log("guard ", authService.isLoggedIn());
   if (authService.isLoggedIn()) {
     return true;
   }
