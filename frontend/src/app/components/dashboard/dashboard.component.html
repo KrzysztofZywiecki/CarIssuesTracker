@@ -1,17 +1,24 @@
 <div class="app-container">
-  <mat-toolbar class="toolbar" color="primary">
-    <button mat-icon-button (click)="toggleSidebar()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <h1>Issue tracker</h1>
-  </mat-toolbar>
   <mat-sidenav-container class="container">
-    <mat-sidenav #sidenav mode="over" [(opened)]="opened">
+    <mat-sidenav
+      #sidenav
+      mode="over"
+      [(opened)]="opened"
+      class="sidepanel-size"
+    >
       <app-navbar [sidepanelRef]="sidenav"></app-navbar>
     </mat-sidenav>
 
-    <mat-sidenav-content class="content-container">
-      <router-outlet></router-outlet>
+    <mat-sidenav-content class="sidenav-content-container">
+      <mat-toolbar class="toolbar" color="primary">
+        <button mat-icon-button (click)="toggleSidebar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h1>Issue tracker</h1>
+      </mat-toolbar>
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

@@ -15,14 +15,21 @@
   @include mat.elevation(4);
 }
 
+.sidepanel-size {
+  width: min(280px, 100vw - 64px);
+}
+
 .container {
   flex: 1;
   box-sizing: border-box;
   padding: 0;
 }
 
-.content-container {
+.sidenav-content-container {
   box-sizing: border-box;
   position: relative;
-  padding: 1em;
+}
+
+.content-container {
+  padding: 1rem;
 }
