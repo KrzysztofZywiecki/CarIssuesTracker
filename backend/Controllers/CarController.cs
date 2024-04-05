@@ -9,33 +9,28 @@ namespace Backend.Controllers;
 
 [Route("/car")]
 [Authorize]
-public class CarController(ApplicationDbContext carIssueContext, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService) : ControllerBase
+public class CarController(
+    ApplicationDbContext carIssueContext,
+    UserManager<ApplicationUser> userManager,
+    IAuthorizationService authorizationService,
+    ICarsService carsService) : ControllerBase
 {
     private readonly ApplicationDbContext carIssueContext = carIssueContext;
     private readonly UserManager<ApplicationUser> userManager = userManager;
-    private readonly IAuthorizationService _authorizationService = authorizationService;
+    private readonly IAuthorizationService authorizationService = authorizationService;
+    private readonly ICarsService carsService = carsService;
 
     [HttpPost]
-    public async Task<ActionResult<CarDTO>> AddCar([FromBody] CreateCarDTO createCarDTO)
+    public async Task<ActionResult> AddCar([FromBody] CreateCarDTO createCarDTO)
     {
-        var userId = userManager.GetUserId(User);
-        if (userId is null)
+        try
         {
-            return Unauthorized();
+            await carsService.CreateCar(User, createCarDTO);
+            return Ok();
         }
-
-        var user = await carIssueContext.Users.Include(x => x.Cars).FirstOrDefaultAsync(x => x.Id == userId);
-
-        if (user != null)
+        catch (Exception e)
         {
-            var car = new Car { Name = createCarDTO.Name };
-            user.Cars.Add(car);
-            await carIssueContext.SaveChangesAsync();
-            return Ok(new CarDTO(car));
-        }
-        else
-        {
-            return NotFound();
+            return BadRequest(e.Message);
         }
     }
 
@@ -46,7 +41,7 @@ public class CarController(ApplicationDbContext carIssueContext, UserManager<App
         var car = await carIssueContext.Cars.Include(x => x.ApplicationUser).FirstAsync(x => x.Id == Id);
         if (car != null)
         {
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, car, "SameOwnerPolicy");
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, car, "SameOwnerPolicy");
             if (authorizationResult.Succeeded)
             {
                 return new CarDTO(car);
@@ -66,22 +61,15 @@ public class CarController(ApplicationDbContext carIssueContext, UserManager<App
     [HttpDelete]
     public async Task<ActionResult> DeleteCar([FromRoute] Guid Id)
     {
-        var car = await carIssueContext.Cars.Include(x => x.ApplicationUser).FirstAsync(x => x.Id == Id);
-        if (car != null)
+        try
         {
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, car, "SameOwnerPolicy");
-            if (authorizationResult.Succeeded)
-            {
-                carIssueContext.Cars.Remove(car);
-                await carIssueContext.SaveChangesAsync();
-                return Ok();
-            }
-            else
-            {
-                return Unauthorized();
-            }
+            await carsService.DeleteCar(User, Id);
+            return Ok();
         }
-        return NotFound();
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
 
     }
 
