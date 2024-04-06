@@ -21,6 +21,10 @@
   -webkit-user-select: none;
 }
 
+.nav-spacer {
+  width: 1rem;
+}
+
 @mixin color($theme) {
   .list-item-active * {
     color: mat.get-theme-color($theme, accent, text);

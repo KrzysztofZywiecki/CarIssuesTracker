@@ -1,41 +1,21 @@
 <mat-nav-list class="nav-list" #navList>
+  @for(listItem of navListItems; track listItem.navLink) {
   <a
     mat-list-item
-    routerLink="my-fleet"
+    [routerLink]="listItem.navLink"
     routerLinkActive
-    #routerLinkActiveInstance1="routerLinkActive"
+    #routerLinkActiveInstance="routerLinkActive"
     (click)="sidepanelRef.close()"
-    [class.list-item-active]="routerLinkActiveInstance1.isActive"
-    tabindex="-1"
-  >
-    <div class="nav-link"><mat-icon>menu</mat-icon><span>My fleet</span></div>
-  </a>
-  <a
-    mat-list-item
-    routerLink="summary"
-    routerLinkActive
-    #routerLinkActiveInstance2="routerLinkActive"
-    (click)="sidepanelRef.close()"
-    [class.list-item-active]="routerLinkActiveInstance2.isActive"
+    [class.list-item-active]="routerLinkActiveInstance.isActive"
     tabindex="-1"
   >
     <div class="nav-link">
-      <mat-icon>directions_car</mat-icon><span>Summary</span>
+      <mat-icon>{{ listItem.icon }}</mat-icon>
+      <div class="nav-spacer"></div>
+      <span>{{ listItem.label }}</span>
     </div>
   </a>
-  <a
-    mat-list-item
-    routerLink="profile"
-    routerLinkActive
-    #routerLinkActiveInstance3="routerLinkActive"
-    (click)="sidepanelRef.close()"
-    [class.list-item-active]="routerLinkActiveInstance3.isActive"
-    tabindex="-1"
-  >
-    <div class="nav-link">
-      <mat-icon>account_circle</mat-icon><span>Profile</span>
-    </div>
-  </a>
+  }
   <div class="spacer"></div>
   <mat-divider />
   <mat-list-item (click)="logOut()" tabindex="-1">

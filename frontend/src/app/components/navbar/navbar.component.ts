@@ -7,6 +7,12 @@ import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { MatSidenav } from "@angular/material/sidenav";
 
+type NavListitem = {
+  label: string;
+  icon: string;
+  navLink: string;
+};
+
 @Component({
   selector: "app-navbar",
   standalone: true,
@@ -23,6 +29,24 @@ import { MatSidenav } from "@angular/material/sidenav";
 })
 export class NavbarComponent {
   constructor(private _authService: AuthService, private _router: Router) {}
+
+  navListItems: NavListitem[] = [
+    {
+      navLink: "my-fleet",
+      icon: "menu",
+      label: "My fleet",
+    },
+    {
+      navLink: "summary",
+      icon: "directions_car",
+      label: "Summary",
+    },
+    {
+      navLink: "profile",
+      icon: "account_circle",
+      label: "Profile",
+    },
+  ];
 
   @Input({ required: true }) sidepanelRef!: MatSidenav;
 
