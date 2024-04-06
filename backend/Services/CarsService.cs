@@ -60,7 +60,7 @@ public class CarsService(
     {
         var car = await applicationDbContext.Cars
             .Include(x => x.ApplicationUser)
-            .FirstAsync();
+            .FirstAsync(x => x.Id == carId);
         if (car != null)
         {
             var authorizationResult = await authorizationService.AuthorizeAsync(userPrincipal, car, "SameOwnerPolicy");

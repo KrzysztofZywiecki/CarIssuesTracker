@@ -1,5 +1,6 @@
 
 using System.Text.Json.Serialization;
+using Backend.Middleware;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddScoped<ICarsService, CarsService>();
+builder.Services.AddTransient<ExceptionConverterMiddleware>();
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite("Data Source=carIssuesDatabase.db"));
 builder.Services.AddAuthorization(options =>
 {
@@ -53,7 +55,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors();
 app.MapIdentityApi<ApplicationUser>();
-app.MapControllers();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionConverterMiddleware>();
+app.MapControllers();
 app.Run();
 

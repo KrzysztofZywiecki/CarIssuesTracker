@@ -23,45 +23,23 @@ public class CarController(
     [HttpPost]
     public async Task<ActionResult> AddCar([FromBody] CreateCarDTO createCarDTO)
     {
-        try
-        {
-            await carsService.CreateCar(User, createCarDTO);
-            return Created();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        await carsService.CreateCar(User, createCarDTO);
+        return Created();
     }
 
     [Route("{Id}")]
     [HttpGet]
     public async Task<ActionResult<CarDTO>> GetCar([FromRoute] Guid Id)
     {
-        try
-        {
-            return Ok(await carsService.GetCar(User, Id));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        return Ok(await carsService.GetCar(User, Id));
     }
 
     [Route("{Id}")]
     [HttpDelete]
     public async Task<ActionResult> DeleteCar([FromRoute] Guid Id)
     {
-        try
-        {
-            await carsService.DeleteCar(User, Id);
-            return NoContent();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-
+        await carsService.DeleteCar(User, Id);
+        return NoContent();
     }
 
     [Route("getAll")]

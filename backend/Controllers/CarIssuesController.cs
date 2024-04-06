@@ -11,22 +11,6 @@ public class CarIssuesController(ApplicationDbContext carIssueContext) : Control
 {
     private readonly ApplicationDbContext carIssueContext = carIssueContext;
 
-
-    [HttpGet]
-    [Route("{Id}")]
-    public ActionResult<CarIssueDTO> GetIssuesForUser(Guid Id)
-    {
-        var found = carIssueContext.CarIssues.Find(Id);
-        if (found != null)
-        {
-            return Ok(new CarIssueDTO(found));
-        }
-        else
-        {
-            return NotFound();
-        }
-    }
-
     [HttpPost]
     [Route("{CarId}")]
     public async Task<ActionResult<CarIssueDTO>> CreateNewIssue([FromRoute] Guid CarId, [FromBody] CreateCarIssueDTO createCarIssueDTO)
