@@ -26,7 +26,7 @@ public class CarController(
         try
         {
             await carsService.CreateCar(User, createCarDTO);
-            return Ok();
+            return Created();
         }
         catch (Exception e)
         {
@@ -38,22 +38,13 @@ public class CarController(
     [HttpGet]
     public async Task<ActionResult<CarDTO>> GetCar([FromRoute] Guid Id)
     {
-        var car = await carIssueContext.Cars.Include(x => x.ApplicationUser).FirstAsync(x => x.Id == Id);
-        if (car != null)
+        try
         {
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, car, "SameOwnerPolicy");
-            if (authorizationResult.Succeeded)
-            {
-                return new CarDTO(car);
-            }
-            else
-            {
-                return Unauthorized();
-            }
+            return Ok(await carsService.GetCar(User, Id));
         }
-        else
+        catch (Exception e)
         {
-            return NotFound();
+            return BadRequest(e.Message);
         }
     }
 
@@ -64,7 +55,7 @@ public class CarController(
         try
         {
             await carsService.DeleteCar(User, Id);
-            return Ok();
+            return NoContent();
         }
         catch (Exception e)
         {
@@ -77,9 +68,7 @@ public class CarController(
     [HttpGet]
     public async Task<ActionResult<CarDTO[]>> GetUserCars()
     {
-        var userId = userManager.GetUserId(User);
-        var result = carIssueContext.Cars.Where(x => x.ApplicationUserId == userId).Select(x => new CarDTO(x));
-        return await result.ToArrayAsync();
+        return Ok(await carsService.GetUserCars(User));
     }
 
     [Route("{Id}/issues")]
@@ -92,9 +81,6 @@ public class CarController(
             var result = car.Issues.Select(x => new CarIssueDTO(x)).ToArray();
             return Ok(result);
         }
-        else
-        {
-            return NotFound();
-        }
+        return NotFound();
     }
 }
