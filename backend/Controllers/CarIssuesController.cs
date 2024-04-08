@@ -7,30 +7,31 @@ namespace Backend.Controllers;
 
 [Route("issues")]
 [Authorize]
-public class CarIssuesController(ApplicationDbContext carIssueContext) : ControllerBase
+public class CarIssuesController(ICarIssuesService carIssuesService) : ControllerBase
 {
-    private readonly ApplicationDbContext carIssueContext = carIssueContext;
+
+    private readonly ICarIssuesService carIssuesService = carIssuesService;
+
+    [Route("{CarId}")]
+    [HttpGet]
+    public async Task<ActionResult<CarIssueDTO[]>> GetCarIssues([FromRoute] Guid CarId)
+    {
+        var issues = await carIssuesService.GetCarIssues(User, CarId);
+        return issues;
+    }
 
     [HttpPost]
     [Route("{CarId}")]
-    public async Task<ActionResult<CarIssueDTO>> CreateNewIssue([FromRoute] Guid CarId, [FromBody] CreateCarIssueDTO createCarIssueDTO)
+    public async Task CreateNewIssue([FromRoute] Guid CarId, [FromBody] CreateCarIssueDTO createCarIssueDTO)
     {
-        var car = await carIssueContext.Cars.Include(x => x.Issues).FirstAsync(x => x.Id == CarId);
-        if (car != null)
-        {
-            var issue = new CarIssue()
-            {
-                Description = createCarIssueDTO.Description,
-                CreateDateTime = DateTime.Now
-            };
-
-            car.Issues.Add(issue);
-
-            return Ok(new CarIssueDTO(issue));
-        }
-        else
-        {
-            return NotFound();
-        }
+        await carIssuesService.CreateCarIssue(User, CarId, createCarIssueDTO);
     }
+
+    [HttpPut]
+    [Route("{CarId}/{IssueId}")]
+    public async Task UpdateCarIssue([FromRoute] Guid CarId, [FromRoute] Guid IssueId, [FromBody] UpdateCarIssueDTO carIssueDTO)
+    {
+        await carIssuesService.UpdateCarIssue(User, CarId, IssueId, carIssueDTO);
+    }
+
 }
