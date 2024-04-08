@@ -11,13 +11,9 @@ namespace Backend.Controllers;
 [Authorize]
 public class CarController(
     ApplicationDbContext carIssueContext,
-    UserManager<ApplicationUser> userManager,
-    IAuthorizationService authorizationService,
     ICarsService carsService) : ControllerBase
 {
     private readonly ApplicationDbContext carIssueContext = carIssueContext;
-    private readonly UserManager<ApplicationUser> userManager = userManager;
-    private readonly IAuthorizationService authorizationService = authorizationService;
     private readonly ICarsService carsService = carsService;
 
     [HttpPost]
@@ -47,18 +43,5 @@ public class CarController(
     public async Task<ActionResult<CarDTO[]>> GetUserCars()
     {
         return Ok(await carsService.GetUserCars(User));
-    }
-
-    [Route("{Id}/issues")]
-    [HttpGet]
-    public async Task<ActionResult<CarIssueDTO[]>> GetCarIssues([FromRoute] Guid Id)
-    {
-        var car = await carIssueContext.Cars.Include(x => x.Issues).FirstAsync(x => x.Id == Id);
-        if (car != null)
-        {
-            var result = car.Issues.Select(x => new CarIssueDTO(x)).ToArray();
-            return Ok(result);
-        }
-        return NotFound();
     }
 }
