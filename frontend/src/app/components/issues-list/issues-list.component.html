@@ -1,42 +1,73 @@
 <p>issues-list works!</p>
+@if(dataSource !== null) {
 <table
   mat-table
   [dataSource]="dataSource"
   multiTemplateDataRows
   class="mat-elevation-z8"
 >
-  @for (column of columnsToDisplay; track column) {
-  <ng-container matColumnDef="{{ column }}">
-    <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-    <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+  <ng-container matColumnDef="repairCost">
+    <th mat-header-cell *matHeaderCellDef>Repair cost</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.repairCost | currency : "PLN" }}
+    </td>
   </ng-container>
-  }
 
-  <ng-container matColumnDef="expandedDetail">
-    <td
-      mat-cell
-      *matCellDef="let element"
-      [attr.colspan]="columnsToDisplay.length"
-    >
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>Title</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.title }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="createDateTime">
+    <th mat-header-cell *matHeaderCellDef>Creation time</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.createDateTime | date : "medium" }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="repairDateTime">
+    <th mat-header-cell *matHeaderCellDef>Resolution time</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.repairDateTime | date : "medium" }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="4">
       <div class="element-detail" @showInOut *ngIf="element == expandedElement">
-        <div class="element-description">
+        <span>
           {{ element.description }}
-        </div>
+        </span>
       </div>
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr
+    mat-header-row
+    *matHeaderRowDef="[
+      'repairCost',
+      'title',
+      'createDateTime',
+      'repairDateTime'
+    ]"
+  ></tr>
   <tr
     mat-row
-    *matRowDef="let element; columns: columnsToDisplay"
+    *matRowDef="
+      let element;
+      columns: ['repairCost', 'title', 'createDateTime', 'repairDateTime']
+    "
     class="element-row"
+    [class.expanded-row]="expandedElement === element"
     (click)="expandedElement = expandedElement === element ? null : element"
   ></tr>
   <tr
     mat-row
-    *matRowDef="let row; columns: ['expandedDetail']"
+    *matRowDef="let element; columns: ['description']"
     class="detail-row"
   ></tr>
 </table>
 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+}

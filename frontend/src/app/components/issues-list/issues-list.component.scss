@@ -2,6 +2,11 @@ tr.detail-row {
   height: 0;
 }
 
+tr.detail-row td:last-child {
+  border-bottom: 1px solid
+    var(--mat-table-row-item-outline-color, rgba(0, 0, 0, 0.12));
+}
+
 tr.element-row:not(.expanded-row):hover td {
   background: rgba(128, 128, 128, 0.1);
 }
@@ -16,7 +21,6 @@ tr.element-row:not(.expanded-row):active td {
 
 .element-detail {
   overflow: hidden;
-  display: flex;
 }
 
 .element-diagram {
@@ -31,10 +35,6 @@ tr.element-row:not(.expanded-row):active td {
   font-weight: bold;
   font-size: 40px;
   line-height: normal;
-}
-
-.element-description {
-  padding: 16px;
 }
 
 .element-description-attribution {

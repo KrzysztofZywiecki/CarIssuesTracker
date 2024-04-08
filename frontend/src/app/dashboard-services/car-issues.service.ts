@@ -1,16 +1,14 @@
 import { Injectable, Signal, WritableSignal, signal } from "@angular/core";
+import { Observable, map } from "rxjs";
+import { environment } from "../../environments/environment.development";
+import { HttpClient } from "@angular/common/http";
+import { CarIssueDTO } from "../models/car-issue-dto";
 
 @Injectable()
 export class CarIssuesService {
-  private _issuesList: WritableSignal<number[]> = signal([1, 2, 3]);
+  constructor(private _http: HttpClient) {}
 
-  get issuesList(): Signal<number[]> {
-    return this._issuesList.asReadonly();
+  getCarIssues(carId: string): Observable<any> {
+    return this._http.get<CarIssueDTO>(`${environment.apiUrl}/issues/${carId}`);
   }
-
-  set issuesList(value: number[]) {
-    this._issuesList.set(value);
-  }
-
-  constructor() {}
 }
