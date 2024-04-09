@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Backend.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Controllers;
 
-[Route("/car")]
+[Route("/cars")]
 [Authorize]
 public class CarController(
     ApplicationDbContext carIssueContext,
