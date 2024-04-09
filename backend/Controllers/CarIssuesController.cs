@@ -30,4 +30,12 @@ public class CarIssuesController(ICarIssuesService carIssuesService) : Controlle
     {
         return Ok(await carIssuesService.UpdateCarIssue(User, CarId, IssueId, carIssueDTO));
     }
+
+    [HttpDelete]
+    [Route("{IssueId}")]
+    public async Task<ActionResult<CarIssueDTO>> RemoveCarIssue([FromRoute] Guid CarId, [FromRoute] Guid IssueId)
+    {
+        await carIssuesService.RemoveCarIssue(User, CarId, IssueId);
+        return NoContent();
+    }
 }
