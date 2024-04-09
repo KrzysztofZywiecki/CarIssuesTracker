@@ -1,5 +1,4 @@
 import { Routes } from "@angular/router";
-import { IssuesListComponent } from "./components/issues-list/issues-list.component";
 import { IssuesSummaryComponent } from "./components/issues-summary/issues-summary.component";
 import { AuthComponent } from "./auth/auth/auth.component";
 import { authGuard } from "./services/auth-helpers";
@@ -10,6 +9,7 @@ import { FleetComponent } from "./components/fleet/fleet.component";
 import { CarsService } from "./dashboard-services/cars.service";
 import { CarIssuesService } from "./dashboard-services/car-issues.service";
 import { ProfileComponent } from "./components/profile/profile.component";
+import { CarIssuesComponent } from "./components/car-issues/car-issues.component";
 
 export const routes: Routes = [
   {
@@ -27,7 +27,7 @@ export const routes: Routes = [
     providers: [CarsService, CarIssuesService],
     children: [
       { path: "my-fleet", component: FleetComponent },
-      { path: "issues/:id", component: IssuesListComponent },
+      { path: "issues/:id", component: CarIssuesComponent },
       { path: "summary", component: IssuesSummaryComponent },
       { path: "profile", component: ProfileComponent },
       { path: "**", redirectTo: "my-fleet" },

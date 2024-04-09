@@ -1,4 +1,3 @@
-<p>issues-list works!</p>
 @if(dataSource !== null) {
 <table
   mat-table
@@ -9,55 +8,76 @@
   <ng-container matColumnDef="repairCost">
     <th mat-header-cell *matHeaderCellDef>Repair cost</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.repairCost | currency : "PLN" }}
+      {{ (element.repairCost | currency : "PLN") ?? "-" }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="title">
     <th mat-header-cell *matHeaderCellDef>Title</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.title }}
+      <div class="title">
+        {{ element.title }}
+      </div>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="createDateTime">
     <th mat-header-cell *matHeaderCellDef>Creation time</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.createDateTime | date : "medium" }}
+      {{ element.createDateTime | date : "mediumDate" }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="repairDateTime">
     <th mat-header-cell *matHeaderCellDef>Resolution time</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.repairDateTime | date : "medium" }}
+      {{ element.repairDateTime | date : "mediumDate" }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="description">
     <td mat-cell *matCellDef="let element" [attr.colspan]="4">
       <div class="element-detail" @showInOut *ngIf="element == expandedElement">
+        @if(!isSmallScreen) {
+        <span
+          >Created at: {{ element.createDateTime | date : "mediumDate" }}</span
+        >
+        @if(element.resolved) {
+        <span
+          >Resolved at: {{ element.repairDateTime | date : "mediumDate" }}</span
+        >
+
+        } @else {
+        <span>Not resolved</span>
+        } }
         <span>
           {{ element.description }}
         </span>
+        <div class="issue-actions">
+          <button mat-button mat-flat-button color="primary">
+            {{ element.resolved ? "Edit" : "Resolve" }}
+          </button>
+          <button mat-button mat-flat-button color="warn">Delete</button>
+        </div>
       </div>
     </td>
   </ng-container>
 
   <tr
     mat-header-row
-    *matHeaderRowDef="[
-      'repairCost',
-      'title',
-      'createDateTime',
-      'repairDateTime'
-    ]"
+    *matHeaderRowDef="
+      ['title', 'repairCost'].concat(
+        isSmallScreen ? ['createDateTime', 'repairDateTime'] : []
+      )
+    "
   ></tr>
   <tr
     mat-row
     *matRowDef="
       let element;
-      columns: ['repairCost', 'title', 'createDateTime', 'repairDateTime']
+      columns: ['title', 'repairCost'].concat(
+        isSmallScreen ? ['createDateTime', 'repairDateTime'] : []
+      )
     "
     class="element-row"
     [class.expanded-row]="expandedElement === element"

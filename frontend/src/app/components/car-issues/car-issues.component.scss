@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.container > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (min-width: 481px) {
+  .actions *:not(:last-child) {
+    margin-right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: max-content;
+  }
+
+  .actions *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}

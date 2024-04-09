@@ -13,9 +13,11 @@ import {
   provideHttpClient,
 } from "@angular/common/http";
 import { AuthInterceptor } from "./auth/helpers/auth.interceptor";
+import { provideNativeDateAdapter } from "@angular/material/core";
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideNativeDateAdapter(),
     importProvidersFrom(HttpClientModule),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideRouter(routes, withViewTransitions(), withComponentInputBinding()),

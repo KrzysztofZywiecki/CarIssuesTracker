@@ -3,12 +3,22 @@ import { Observable, map } from "rxjs";
 import { environment } from "../../environments/environment.development";
 import { HttpClient } from "@angular/common/http";
 import { CarIssueDTO } from "../models/car-issue-dto";
+import { CreateCarIssueDTO } from "../models/create-car-issue-dto";
 
 @Injectable()
 export class CarIssuesService {
   constructor(private _http: HttpClient) {}
 
   getCarIssues(carId: string): Observable<any> {
-    return this._http.get<CarIssueDTO>(`${environment.apiUrl}/issues/${carId}`);
+    return this._http.get<CarIssueDTO>(
+      `${environment.apiUrl}/cars/${carId}/issues`
+    );
+  }
+
+  createCarIssue(carId: string, createCarIssueDTO: CreateCarIssueDTO) {
+    return this._http.post<CarIssueDTO>(
+      `${environment.apiUrl}/cars/${carId}/issues`,
+      createCarIssueDTO
+    );
   }
 }

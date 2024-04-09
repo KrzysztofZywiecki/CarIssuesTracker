@@ -4,5 +4,6 @@ export class CarIssueDTO {
   description: string = "";
   createDateTime: string = new Date(Date.now()).toISOString();
   repairDateTime: string | null = null;
-  repairCost: number = 0;
+  resolved: boolean = false;
+  repairCost: number | null = null;
 }

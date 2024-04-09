@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>Add new car issue</h2>
+<mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <mat-label>Issue title</mat-label>
+      <input
+        matInput
+        [(ngModel)]="issueDTO.title"
+        required
+        name="title"
+        #title="ngModel"
+      />
+      <mat-error *ngIf="title.errors?.['required']"
+        >Title is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Issue description</mat-label>
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        [(ngModel)]="issueDTO.description"
+        name="description"
+      ></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Creation date</mat-label>
+      <input
+        matInput
+        required
+        [matDatepicker]="picker"
+        name="creationDate"
+        [(ngModel)]="issueDTO.createDateTime"
+        #dateInput="ngModel"
+      />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="dateInput.errors?.['matDatepickerParse']"
+        >Invalid date format</mat-error
+      >
+    </mat-form-field>
+  </form>
+  <p>{{ issueDTO | json }}</p>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="null">Cancel</button>
+    <div class="spacer"></div>
+    <button
+      mat-button
+      mat-flat-button
+      type="button"
+      color="primary"
+      [disabled]="form.invalid"
+      [mat-dialog-close]="issueDTO"
+    >
+      Add
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>

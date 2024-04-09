@@ -1,0 +1,28 @@
+<div class="container">
+  <div>
+    {{ carInfo | json }}
+  </div>
+
+  <div class="actions">
+    <button
+      mat-button
+      mat-flat-button
+      color="primary"
+      (click)="openCarEditDialog()"
+    >
+      Edit car info
+    </button>
+    <button
+      mat-button
+      mat-flat-button
+      color="primary"
+      (click)="openAddIssueDialog()"
+    >
+      Add new issue
+    </button>
+  </div>
+
+  @if (carIssues !== null) {
+  <app-issues-list [carIssues]="carIssues"></app-issues-list>
+  }
+</div>

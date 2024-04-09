@@ -21,6 +21,9 @@ tr.element-row:not(.expanded-row):active td {
 
 .element-detail {
   overflow: hidden;
+  padding-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .element-diagram {
@@ -39,4 +42,33 @@ tr.element-row:not(.expanded-row):active td {
 
 .element-description-attribution {
   opacity: 0.5;
+}
+
+.mat-column-title {
+  max-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+}
+
+.mat-column-repairCost {
+  width: 112px;
+}
+
+.mat-column-repairDateTime,
+.mat-column-createDateTime {
+  box-sizing: content-box;
+  width: 108px;
+}
+
+.issue-actions {
+  display: flex;
+  justify-content: start;
+}
+
+.issue-actions *:not(:last-child) {
+  margin-right: 1rem;
 }

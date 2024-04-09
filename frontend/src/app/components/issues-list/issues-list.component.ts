@@ -12,16 +12,12 @@ import {
   trigger,
 } from "@angular/animations";
 import { MatButtonModule } from "@angular/material/button";
-import { CarIssuesService } from "../../dashboard-services/car-issues.service";
 import { CarIssueDTO } from "../../models/car-issue-dto";
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  description: string;
-}
+import {
+  BreakpointObserver,
+  Breakpoints,
+  LayoutModule,
+} from "@angular/cdk/layout";
 
 @Component({
   selector: "app-issues-list",
@@ -33,6 +29,7 @@ export interface PeriodicElement {
     MatTableModule,
     MatIconModule,
     MatButtonModule,
+    LayoutModule,
   ],
   templateUrl: "./issues-list.component.html",
   styleUrl: "./issues-list.component.scss",
@@ -49,29 +46,22 @@ export interface PeriodicElement {
     ]),
   ],
 })
-export class IssuesListComponent implements OnInit {
-  constructor(
-    private carsService: CarsService,
-    private carIssuesService: CarIssuesService
-  ) {}
-
-  @Input()
-  set id(carId: string) {
-    this.carIssuesService.getCarIssues(carId).subscribe((value) => {
-      this.dataSource = new MatTableDataSource(value);
+export class IssuesListComponent {
+  constructor(private breakpointObserver: BreakpointObserver) {
+    breakpointObserver.observe([Breakpoints.XSmall]).subscribe((value) => {
+      this.isSmallScreen = !value.matches;
     });
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-
-  ngAfterViewInit() {
-    if (this.dataSource != null) {
-      this.dataSource.paginator = this.paginator;
-    }
+  @Input({ required: true }) set carIssues(carIssues: CarIssueDTO[]) {
+    this.dataSource = new MatTableDataSource(carIssues);
+    this.dataSource.paginator = this.paginator;
   }
 
-  expandedElement: PeriodicElement | null = null;
-  dataSource: MatTableDataSource<CarIssueDTO> = new MatTableDataSource();
+  isSmallScreen: boolean = false;
 
-  ngOnInit(): void {}
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+
+  expandedElement: CarIssueDTO | null = null;
+  dataSource: MatTableDataSource<CarIssueDTO> = new MatTableDataSource();
 }
