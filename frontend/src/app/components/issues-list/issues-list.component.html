@@ -54,10 +54,22 @@
           {{ element.description }}
         </span>
         <div class="issue-actions">
-          <button mat-button mat-flat-button color="primary">
+          <button
+            mat-button
+            mat-flat-button
+            color="primary"
+            (click)="updateIssue(element)"
+          >
             {{ element.resolved ? "Edit" : "Resolve" }}
           </button>
-          <button mat-button mat-flat-button color="warn">Delete</button>
+          <button
+            mat-button
+            mat-flat-button
+            color="warn"
+            (click)="deleteIssue(element.id)"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </td>

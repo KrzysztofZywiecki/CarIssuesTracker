@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CarsService } from "../../dashboard-services/cars.service";
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
@@ -58,10 +65,22 @@ export class IssuesListComponent {
     this.dataSource.paginator = this.paginator;
   }
 
+  @Output("delete") deletionEvent = new EventEmitter<string>();
+
+  @Output("updateIssue") updateIssueEvent = new EventEmitter<CarIssueDTO>();
+
   isSmallScreen: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 
   expandedElement: CarIssueDTO | null = null;
   dataSource: MatTableDataSource<CarIssueDTO> = new MatTableDataSource();
+
+  deleteIssue(issueId: string) {
+    this.deletionEvent.emit(issueId);
+  }
+
+  updateIssue(issue: CarIssueDTO) {
+    this.updateIssueEvent.emit(issue);
+  }
 }
