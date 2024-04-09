@@ -17,6 +17,7 @@ public class CarIssue
     [Column(TypeName = "decimal(8, 2)")]
     public decimal? RepairCost { get; set; }
 
+    public Car? car { get; set; }
     public Guid CarId { get; set; }
 };
 
