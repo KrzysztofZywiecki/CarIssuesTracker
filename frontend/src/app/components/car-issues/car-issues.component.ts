@@ -7,7 +7,7 @@ import { CommonModule } from "@angular/common";
 import { IssuesListComponent } from "../issues-list/issues-list.component";
 import { MatButton } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
-import { ConfirmDeleteComponent } from "../confirm-delete/confirm-delete.component";
+import { ConfirmCarDeleteComponent } from "../confirm-delete/confirm-car-delete.component";
 import { EditCarDialogComponent } from "../edit-car-dialog/edit-car-dialog.component";
 import { AddNewIssueDialogComponent } from "../add-new-issue-dialog/add-new-issue-dialog.component";
 
