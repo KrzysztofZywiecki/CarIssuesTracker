@@ -27,7 +27,7 @@ public class CarIssuesService(
         }
         throw new Exception("User is unauthorized");
     }
-    public async Task CreateCarIssue(ClaimsPrincipal userPrincipal, Guid carId, CreateCarIssueDTO createCarIssueDTO)
+    public async Task<CarIssueDTO> CreateCarIssue(ClaimsPrincipal userPrincipal, Guid carId, CreateCarIssueDTO createCarIssueDTO)
     {
         var carIssue = new CarIssue()
         {
@@ -38,6 +38,7 @@ public class CarIssuesService(
         var car = await GetCarAsync(userPrincipal, carId);
         car.Issues.Add(carIssue);
         await applicationDbContext.SaveChangesAsync();
+        return new CarIssueDTO(carIssue);
     }
 
     public async Task<CarIssueDTO[]> GetCarIssues(ClaimsPrincipal userPrincipal, Guid carId)
@@ -54,7 +55,7 @@ public class CarIssuesService(
         applicationDbContext.CarIssues.Remove(issue);
     }
 
-    public async Task UpdateCarIssue(ClaimsPrincipal userPrincipal, Guid carId, Guid carIssueId, UpdateCarIssueDTO carIssueDTO)
+    public async Task<CarIssueDTO> UpdateCarIssue(ClaimsPrincipal userPrincipal, Guid carId, Guid carIssueId, UpdateCarIssueDTO carIssueDTO)
     {
         var car = await GetCarAsync(userPrincipal, carId);
         var issue = car.Issues.First(x => x.Id == carIssueId);
@@ -64,5 +65,6 @@ public class CarIssuesService(
         issue.RepairDateTime = carIssueDTO.RepairDateTime;
         issue.RepairCost = carIssueDTO.RepairCost;
         await applicationDbContext.SaveChangesAsync();
+        return new CarIssueDTO(issue);
     }
 }

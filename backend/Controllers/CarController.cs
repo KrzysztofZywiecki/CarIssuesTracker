@@ -15,10 +15,10 @@ public class CarController(
     private readonly ICarsService carsService = carsService;
 
     [HttpPost]
-    public async Task<ActionResult> AddCar([FromBody] CreateCarDTO createCarDTO)
+    public async Task<ActionResult<CarDTO>> AddCar([FromBody] CreateCarDTO createCarDTO)
     {
-        await carsService.CreateCar(User, createCarDTO);
-        return Created();
+        var newCar = await carsService.CreateCar(User, createCarDTO);
+        return Created("", newCar);
     }
 
     [Route("{Id}")]

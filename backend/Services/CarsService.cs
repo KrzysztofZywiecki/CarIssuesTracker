@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Backend.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using System.Runtime.Intrinsics.Arm;
-using Microsoft.OpenApi.Exceptions;
 
 public class CarsService(
     UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService,
@@ -16,7 +13,7 @@ public class CarsService(
     private IAuthorizationService authorizationService = authorizationService;
     private ApplicationDbContext applicationDbContext = applicationDbContext;
 
-    public async Task CreateCar(ClaimsPrincipal userPrincipal, CreateCarDTO createCarDTO)
+    public async Task<CarDTO> CreateCar(ClaimsPrincipal userPrincipal, CreateCarDTO createCarDTO)
     {
         var userId = userManager.GetUserId(userPrincipal);
         var user = await applicationDbContext.Users.Include(x => x.Cars).FirstAsync(x => x.Id == userId);
@@ -26,6 +23,7 @@ public class CarsService(
             var car = new Car { Name = createCarDTO.Name };
             user.Cars.Add(car);
             await applicationDbContext.SaveChangesAsync();
+            return new CarDTO(car);
         }
         else
         {
@@ -78,13 +76,6 @@ public class CarsService(
             throw new Exception("Car not found");
         }
     }
-
-    public Task<CarIssueDTO[]> GetCarIssues(ClaimsPrincipal userPrincipal, Guid carId)
-    {
-        throw new Exception("Unimplemented error");
-        // var car = await applicationDbContext.CarIssues.Where(x => Car)
-    }
-
     public async Task<CarDTO[]> GetUserCars(ClaimsPrincipal userPrincipal)
     {
         var userId = userManager.GetUserId(userPrincipal);

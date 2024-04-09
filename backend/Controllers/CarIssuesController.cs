@@ -15,20 +15,19 @@ public class CarIssuesController(ICarIssuesService carIssuesService) : Controlle
     public async Task<ActionResult<CarIssueDTO[]>> GetCarIssues([FromRoute] Guid CarId)
     {
         var issues = await carIssuesService.GetCarIssues(User, CarId);
-        return issues;
+        return Ok(issues);
     }
 
     [HttpPost]
-    public async Task CreateNewIssue([FromRoute] Guid CarId, [FromBody] CreateCarIssueDTO createCarIssueDTO)
+    public async Task<ActionResult<CarIssueDTO>> CreateNewIssue([FromRoute] Guid CarId, [FromBody] CreateCarIssueDTO createCarIssueDTO)
     {
-        await carIssuesService.CreateCarIssue(User, CarId, createCarIssueDTO);
+        return Created("", await carIssuesService.CreateCarIssue(User, CarId, createCarIssueDTO));
     }
 
     [HttpPut]
     [Route("{IssueId}")]
-    public async Task UpdateCarIssue([FromRoute] Guid CarId, [FromRoute] Guid IssueId, [FromBody] UpdateCarIssueDTO carIssueDTO)
+    public async Task<ActionResult<CarIssueDTO>> UpdateCarIssue([FromRoute] Guid CarId, [FromRoute] Guid IssueId, [FromBody] UpdateCarIssueDTO carIssueDTO)
     {
-        await carIssuesService.UpdateCarIssue(User, CarId, IssueId, carIssueDTO);
+        return Ok(await carIssuesService.UpdateCarIssue(User, CarId, IssueId, carIssueDTO));
     }
-
 }

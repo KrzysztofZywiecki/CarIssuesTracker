@@ -98,7 +98,7 @@ namespace backend.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.CarIssue", b =>
@@ -131,7 +131,7 @@ namespace backend.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("CarIssues");
+                    b.ToTable("CarIssues", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
