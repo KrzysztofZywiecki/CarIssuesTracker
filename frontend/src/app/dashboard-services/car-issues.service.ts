@@ -15,10 +15,19 @@ export class CarIssuesService {
     );
   }
 
-  createCarIssue(carId: string, createCarIssueDTO: CreateCarIssueDTO) {
+  createCarIssue(
+    carId: string,
+    createCarIssueDTO: CreateCarIssueDTO
+  ): Observable<CarIssueDTO> {
     return this._http.post<CarIssueDTO>(
       `${environment.apiUrl}/cars/${carId}/issues`,
       createCarIssueDTO
+    );
+  }
+
+  removeCarIssue(carId: string, issueId: string): Observable<void> {
+    return this._http.delete<void>(
+      `${environment.apiUrl}/cars/${carId}/issues/${issueId}`
     );
   }
 }
