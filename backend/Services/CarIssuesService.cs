@@ -54,6 +54,7 @@ public class CarIssuesService(
         var car = await GetCarAsync(userPrincipal, carId);
         var issue = car.Issues.First(x => x.Id == carIssueId);
         applicationDbContext.CarIssues.Remove(issue);
+        await applicationDbContext.SaveChangesAsync();
     }
 
     public async Task<CarIssueDTO> UpdateCarIssue(ClaimsPrincipal userPrincipal, Guid carId, Guid carIssueId, UpdateCarIssueDTO carIssueDTO)
