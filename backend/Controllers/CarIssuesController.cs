@@ -28,7 +28,14 @@ public class CarIssuesController(ICarIssuesService carIssuesService) : Controlle
     [Route("{IssueId}")]
     public async Task<ActionResult<CarIssueDTO>> UpdateCarIssue([FromRoute] Guid CarId, [FromRoute] Guid IssueId, [FromBody] UpdateCarIssueDTO carIssueDTO)
     {
-        return Ok(await carIssuesService.UpdateCarIssue(User, CarId, IssueId, carIssueDTO));
+        if (carIssueDTO.RepairCost is not null && carIssueDTO.RepairDateTime is not null)
+        {
+            return Ok(await carIssuesService.UpdateCarIssue(User, CarId, IssueId, carIssueDTO));
+        }
+        else
+        {
+            return BadRequest("Both repair cost and date must not be null");
+        }
     }
 
     [HttpDelete]

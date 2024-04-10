@@ -13,7 +13,7 @@ public class CarIssue
     public DateTime? RepairDateTime { get; set; }
     [Column(TypeName = "decimal(8, 2)")]
     public decimal? RepairCost { get; set; }
-    public bool Resolved => RepairDateTime != null;
+    public bool Resolved => RepairDateTime is not null && RepairCost is not null;
 
     public Car? car { get; set; }
     public Guid CarId { get; set; }
