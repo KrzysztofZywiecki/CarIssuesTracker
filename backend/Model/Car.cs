@@ -18,3 +18,5 @@ public record CarDTO(Guid Id, string Name)
 }
 
 public record CreateCarDTO(string Name);
+
+public record UpdateCarDTO(string Name);

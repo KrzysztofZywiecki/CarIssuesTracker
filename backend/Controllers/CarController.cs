@@ -36,6 +36,14 @@ public class CarController(
         return NoContent();
     }
 
+    [Route("{Id}")]
+    [HttpPut]
+    public async Task<ActionResult<CarDTO>> UpdateCar([FromRoute] Guid Id, [FromBody] UpdateCarDTO updateCarDTO)
+    {
+        var carDTO = await carsService.UpdateCar(User, Id, updateCarDTO);
+        return Ok(carDTO);
+    }
+
     [Route("getAll")]
     [HttpGet]
     public async Task<ActionResult<CarDTO[]>> GetUserCars()
