@@ -10,8 +10,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { EditCarDialogComponent } from "../edit-car-dialog/edit-car-dialog.component";
 import { AddNewIssueDialogComponent } from "../add-new-issue-dialog/add-new-issue-dialog.component";
 import { UpdateIssueDialogComponent } from "../update-issue-dialog/update-issue-dialog.component";
-import { ConfirmIssueDeleteComponent } from "../confirm-issue-delete/confirm-issue-delete.component";
 import { UpdateCarIssueDTO } from "../../models/update-car-issue-dto";
+import { ConfirmDeleteComponent } from "../confirm-car-delete/confirm-delete.component";
 
 @Component({
   selector: "app-car-issues",
@@ -77,7 +77,9 @@ export class CarIssuesComponent {
   }
 
   deleteIssue(issueId: string) {
-    const dialogRef = this.dialogService.open(ConfirmIssueDeleteComponent);
+    const dialogRef = this.dialogService.open(ConfirmDeleteComponent, {
+      data: "Are you sure you want to delete selected issue?",
+    });
     dialogRef.afterClosed().subscribe((shouldDelete) => {
       if (shouldDelete) {
         this.carIssuesService

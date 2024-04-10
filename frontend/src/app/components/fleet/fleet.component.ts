@@ -10,7 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { CreateCarDTO } from "../../models/create-car-dto";
 import { RouterLink } from "@angular/router";
-import { ConfirmCarDeleteComponent } from "../confirm-car-delete/confirm-car-delete.component";
+import { ConfirmDeleteComponent } from "../confirm-car-delete/confirm-delete.component";
 import { Observable, switchMap } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 
@@ -60,8 +60,8 @@ export class FleetComponent implements OnInit {
   }
 
   deleteCar(id: string, carName: string) {
-    const dialogRef = this.dialog.open(ConfirmCarDeleteComponent, {
-      data: { carName },
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: `Are you sure you want to delete car ${carName}?`,
     });
     dialogRef.afterClosed().subscribe((value) => {
       if (value === true) {
