@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Backend.Exceptions;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,7 @@ public class CarIssuesService(
         {
             return car;
         }
-        throw new Exception("User is unauthorized");
+        throw new UnauthorizedException();
     }
     public async Task<CarIssueDTO> CreateCarIssue(ClaimsPrincipal userPrincipal, Guid carId, CreateCarIssueDTO createCarIssueDTO)
     {

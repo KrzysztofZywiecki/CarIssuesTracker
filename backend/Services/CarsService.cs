@@ -5,6 +5,7 @@ using Backend.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
+using Backend.Exceptions;
 
 public class CarsService(
     UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService,
@@ -26,12 +27,12 @@ public class CarsService(
             }
             else
             {
-                throw new Exception("User is unauthorized");
+                throw new UnauthorizedException();
             }
         }
         else
         {
-            throw new Exception("Car not found");
+            throw new ResourceNotFoundException();
         }
     }
 
@@ -49,7 +50,7 @@ public class CarsService(
         }
         else
         {
-            throw new Exception("User is unauthorized");
+            throw new UnauthorizedException();
         }
     }
 
