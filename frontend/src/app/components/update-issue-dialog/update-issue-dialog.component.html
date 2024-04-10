@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>
+  {{ resolved ? "Update issue information" : "Resolve an issue" }}
+</h2>
+<mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <mat-label>Issue title</mat-label>
+      <input
+        matInput
+        [(ngModel)]="model.title"
+        required
+        name="title"
+        #title="ngModel"
+      />
+      <mat-error *ngIf="title.errors?.['required']"
+        >Title is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Issue description</mat-label>
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        [(ngModel)]="model.description"
+        name="description"
+      ></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Repair cost</mat-label>
+      <input
+        matInput
+        required
+        name="repairCost"
+        [(ngModel)]="model.repairCost"
+        inputmode="numeric"
+        pattern="[1-9][0-9]*(\.[0-9]{1,2})?"
+        (blur)="transformToCurrency($event)"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Creation date</mat-label>
+      <input
+        matInput
+        required
+        [matDatepicker]="picker1"
+        name="creationDate"
+        [(ngModel)]="model.createDateTime"
+        #dateInput="ngModel"
+      />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker1"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+      <mat-error *ngIf="dateInput.errors?.['matDatepickerParse']"
+        >Invalid date format</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Resolution date</mat-label>
+      <input
+        matInput
+        required
+        [matDatepicker]="picker2"
+        name="resolutionDate"
+        [(ngModel)]="model.repairDateTime"
+        #dateInput="ngModel"
+      />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker2"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      <mat-error *ngIf="dateInput.errors?.['matDatepickerParse']"
+        >Invalid date format</mat-error
+      >
+    </mat-form-field>
+  </form>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="null">Cancel</button>
+    <div class="spacer"></div>
+    <button
+      mat-button
+      mat-flat-button
+      type="button"
+      color="primary"
+      [disabled]="form.invalid"
+      [mat-dialog-close]="model"
+    >
+      {{ resolved ? "Update" : "Resolve" }}
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>

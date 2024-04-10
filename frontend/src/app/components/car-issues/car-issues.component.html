@@ -23,6 +23,10 @@
   </div>
 
   @if (carIssues !== null) {
-  <app-issues-list [carIssues]="carIssues"></app-issues-list>
+  <app-issues-list
+    [carIssues]="carIssues"
+    (delete)="deleteIssue($event)"
+    (updateIssue)="showUpdateIssueDialog($event)"
+  ></app-issues-list>
   }
 </div>

@@ -8,7 +8,7 @@
   <ng-container matColumnDef="repairCost">
     <th mat-header-cell *matHeaderCellDef>Repair cost</th>
     <td mat-cell *matCellDef="let element">
-      {{ (element.repairCost | currency : "PLN") ?? "-" }}
+      {{ (element.repairCost | currency) ?? "-" }}
     </td>
   </ng-container>
 
