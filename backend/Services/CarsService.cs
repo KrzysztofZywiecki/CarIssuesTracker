@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Backend.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 public class CarsService(
     UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService,
@@ -12,6 +13,27 @@ public class CarsService(
     private UserManager<ApplicationUser> userManager = userManager;
     private IAuthorizationService authorizationService = authorizationService;
     private ApplicationDbContext applicationDbContext = applicationDbContext;
+
+    private async Task<Car> GetCarAsync(ClaimsPrincipal userPrincipal, Guid carId)
+    {
+        var car = applicationDbContext.Cars.Include(x => x.ApplicationUser).First(x => x.Id == carId);
+        if (car != null)
+        {
+            var authorizationResult = await authorizationService.AuthorizeAsync(userPrincipal, car, "SameOwnerPolicy");
+            if (authorizationResult.Succeeded)
+            {
+                return car;
+            }
+            else
+            {
+                throw new Exception("User is unauthorized");
+            }
+        }
+        else
+        {
+            throw new Exception("Car not found");
+        }
+    }
 
     public async Task<CarDTO> CreateCar(ClaimsPrincipal userPrincipal, CreateCarDTO createCarDTO)
     {
@@ -33,48 +55,16 @@ public class CarsService(
 
     public async Task DeleteCar(ClaimsPrincipal userPrincipal, Guid carId)
     {
-        var car = await applicationDbContext.Cars.Include(x => x.ApplicationUser).FirstAsync(x => x.Id == carId);
-        if (car != null)
-        {
-            var authorizationResult = await authorizationService.AuthorizeAsync(userPrincipal, car, "SameOwnerPolicy");
-            if (authorizationResult.Succeeded)
-            {
-                applicationDbContext.Cars.Remove(car);
-                await applicationDbContext.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception("User is unauthorized");
-            }
-        }
-        else
-        {
-            throw new Exception("Car not found");
-        }
+        var car = await GetCarAsync(userPrincipal, carId);
+        applicationDbContext.Cars.Remove(car);
+        await applicationDbContext.SaveChangesAsync();
 
     }
 
     public async Task<CarDTO> GetCar(ClaimsPrincipal userPrincipal, Guid carId)
     {
-        var car = await applicationDbContext.Cars
-            .Include(x => x.ApplicationUser)
-            .FirstAsync(x => x.Id == carId);
-        if (car != null)
-        {
-            var authorizationResult = await authorizationService.AuthorizeAsync(userPrincipal, car, "SameOwnerPolicy");
-            if (authorizationResult.Succeeded)
-            {
-                return new CarDTO(car);
-            }
-            else
-            {
-                throw new Exception("User is unauthorized");
-            }
-        }
-        else
-        {
-            throw new Exception("Car not found");
-        }
+        var car = await GetCarAsync(userPrincipal, carId);
+        return new CarDTO(car);
     }
     public async Task<CarDTO[]> GetUserCars(ClaimsPrincipal userPrincipal)
     {
@@ -86,5 +76,11 @@ public class CarsService(
         return cars;
     }
 
-
+    public async Task<CarDTO> UpdateCar(ClaimsPrincipal userPrincipal, Guid carId, UpdateCarDTO updateCarDTO)
+    {
+        var car = await GetCarAsync(userPrincipal, carId);
+        car.Name = updateCarDTO.Name;
+        await applicationDbContext.SaveChangesAsync();
+        return new CarDTO(car);
+    }
 }
