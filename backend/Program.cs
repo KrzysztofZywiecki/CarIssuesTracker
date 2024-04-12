@@ -88,36 +88,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionConverterMiddleware>();
 app.MapControllers();
-app.MapPost("login", async ([FromBody] LoginRequest loginRequest, [FromServices] UserManager<ApplicationUser> userManager) =>
-{
-    var user = await userManager.FindByEmailAsync(loginRequest.Email);
-    if (user is not null)
-    {
-        var correctPassword = await userManager.CheckPasswordAsync(user, loginRequest.Password);
-        if (correctPassword)
-        {
-            var tokenDescriptor = new SecurityTokenDescriptor()
-            {
-                Subject = new ClaimsIdentity(new[]
-                    {
-                        new Claim("Id", Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                        new Claim(JwtRegisteredClaimNames.Jti,
-                        Guid.NewGuid().ToString())
-                    }),
-                SigningCredentials = new SigningCredentials(new RsaSecurityKey(rsaKey.ExportParameters(true)), SecurityAlgorithms.RsaSha256),
-                Expires = DateTime.UtcNow.AddMinutes(5),
-            };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            var stringToken = tokenHandler.WriteToken(token);
-            return Results.Ok(stringToken);
-        }
-    }
-    return Results.Unauthorized();
-}
-);
 app.Run();
 
