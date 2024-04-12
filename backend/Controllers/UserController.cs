@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
@@ -14,7 +15,6 @@ public class UserController(UserManager<ApplicationUser> userManager) : Controll
     readonly private UserManager<ApplicationUser> userManager = userManager;
 
     [HttpGet]
-    [Route("info")]
     public async Task<ActionResult<UserDTO>> GetUserInfo()
     {
         var user = await userManager.GetUserAsync(User);
@@ -27,6 +27,24 @@ public class UserController(UserManager<ApplicationUser> userManager) : Controll
         {
             return NotFound();
         }
+    }
 
+    [HttpPut]
+    public async Task<ActionResult<UserDTO>> UpdateUserInfo([FromBody] UserDTO userDTO)
+    {
+        var user = await userManager.GetUserAsync(User);
+
+        if (user != null)
+        {
+            user.Email = userDTO.Email;
+            user.PhoneNumber = userDTO.PhoneNumber;
+            user.UserName = userDTO.Username;
+            await userManager.UpdateAsync(user);
+            return Ok(new UserDTO(user));
+        }
+        else
+        {
+            return Unauthorized();
+        }
     }
 }
