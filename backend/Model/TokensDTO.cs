@@ -1,0 +1,1 @@
+public record TokensDTO(string UserId, string AccessToken, string RefreshToken);

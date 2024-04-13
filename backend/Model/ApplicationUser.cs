@@ -7,6 +7,8 @@ namespace Backend.Models;
 public class ApplicationUser() : IdentityUser
 {
     public ICollection<Car> Cars { get; set; } = [];
+
+    public ICollection<RefreshTokenData> RefreshTokens { get; set; } = [];
 }
 
 [method: JsonConstructor]

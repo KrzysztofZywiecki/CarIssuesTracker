@@ -23,9 +23,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddScoped<ICarsService, CarsService>();
 builder.Services.AddScoped<ICarIssuesService, CarIssuesService>();
+builder.Services.AddScoped<ITokenGenerationService, TokenGenerationService>();
 builder.Services.AddTransient<ExceptionConverterMiddleware>();
 builder.Services.AddSingleton<IAuthorizationHandler, CarOwnershipAuthorizationHandler>();
-builder.Services.AddSingleton<ITokenGenerationService, TokenGenerationService>();
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite("Data Source=carIssuesDatabase.db"));
 
 var publicKey = builder.Configuration["Backend:JWTPublicRsaKey"];
@@ -86,7 +86,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<ExceptionConverterMiddleware>();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<ExceptionConverterMiddleware>();
+}
 app.MapControllers();
 app.Run();
 
