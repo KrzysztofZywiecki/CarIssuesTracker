@@ -1,9 +1,12 @@
 
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using Backend.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 
 public class TokenGenerationService : ITokenGenerationService
@@ -11,17 +14,13 @@ public class TokenGenerationService : ITokenGenerationService
 
     public TokenGenerationService(IConfiguration configuration, UserManager<ApplicationUser> userManager)
     {
-        var privateKey = configuration["Backend:JWTPrivateRsaKey"];
-        var publicKey = configuration["Backend:JWTPublicRsaKey"];
-
-        KeyAlgorithm = RSA.Create();
-        KeyAlgorithm.ImportFromPem(publicKey);
-        KeyAlgorithm.ImportFromPem(privateKey);
+        var secret = configuration["Backend:JWTSecret"];
+        Debug.Assert(secret is not null);
+        tokenSecret = Encoding.ASCII.GetBytes(secret);
         this.userManager = userManager;
     }
 
-    private RSA KeyAlgorithm;
-
+    private byte[] tokenSecret;
     private UserManager<ApplicationUser> userManager;
 
     public async Task<TokensDTO> GenerateTokenPairAsync(ApplicationUser applicationUser)
@@ -52,8 +51,6 @@ public class TokenGenerationService : ITokenGenerationService
         return false;
     }
 
-
-
     public string GenerateAccessToken(ApplicationUser applicationUser)
     {
         var tokenDescriptor = new SecurityTokenDescriptor()
@@ -66,7 +63,7 @@ public class TokenGenerationService : ITokenGenerationService
                     new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString())
                 ]),
-            SigningCredentials = new SigningCredentials(new RsaSecurityKey(KeyAlgorithm.ExportParameters(true)), SecurityAlgorithms.RsaSha256),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenSecret), SecurityAlgorithms.HmacSha256),
             Expires = DateTime.UtcNow.AddMinutes(5),
         };
         var tokenHandler = new JwtSecurityTokenHandler();

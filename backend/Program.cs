@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -28,13 +29,8 @@ builder.Services.AddTransient<ExceptionConverterMiddleware>();
 builder.Services.AddSingleton<IAuthorizationHandler, CarOwnershipAuthorizationHandler>();
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite("Data Source=carIssuesDatabase.db"));
 
-var publicKey = builder.Configuration["Backend:JWTPublicRsaKey"];
-var privateKey = builder.Configuration["Backend:JWTPrivateRsaKey"];
-
-var rsaKey = RSA.Create();
-rsaKey.ImportFromPem(publicKey.ToCharArray());
-rsaKey.ImportFromPem(privateKey.ToCharArray());
-var keyParameters = rsaKey.ExportParameters(true);
+var securityKey = Encoding.ASCII.GetBytes(builder.Configuration["Backend:JWTSecret"]);
+Debug.Assert(securityKey is not null);
 
 builder.Services.AddAuthentication(x =>
     {
@@ -51,7 +47,7 @@ builder.Services.AddAuthentication(x =>
         {
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new RsaSecurityKey(keyParameters),
+            IssuerSigningKey = new SymmetricSecurityKey(securityKey),
             ValidateIssuer = false,
             ValidateAudience = false,
         };
