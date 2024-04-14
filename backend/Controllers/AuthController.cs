@@ -1,4 +1,6 @@
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
+using Backend.DTOs;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +16,7 @@ public class AuthController(
 {
     UserManager<ApplicationUser> userManager = userManager;
     ApplicationDbContext applicationDbContext = applicationDbContext;
+    private static readonly EmailAddressAttribute _emailAddressAttribute = new();
 
     ITokenGenerationService tokenGenerationService = tokenGenerationService;
 
@@ -30,7 +33,7 @@ public class AuthController(
 
     [HttpPost]
     [Route("logIn")]
-    public async Task<ActionResult<TokensDTO>> LogIn([FromBody] LoginRequest loginRequest)
+    public async Task<ActionResult<TokensDTO>> LogIn([FromBody] LoginDTO loginRequest)
     {
         var user = await userManager.FindByEmailAsync(loginRequest.Email);
         if (user is not null)
@@ -42,7 +45,35 @@ public class AuthController(
             }
         }
         return Unauthorized();
+    }
 
+    [HttpPost]
+    [Route("register")]
+    public async Task<ActionResult> RegisterUser([FromBody] RegisterDTO registerRequest)
+    {
+        var email = registerRequest.Email;
+        if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
+        {
+            return BadRequest("Invalid email address");
+        }
+
+        ApplicationUser user = new()
+        {
+            Email = email,
+            UserName = registerRequest.Username,
+            PhoneNumber = registerRequest.PhoneNumber
+        };
+
+        var result = await userManager.CreateAsync(user, registerRequest.Password);
+
+        if (result.Succeeded)
+        {
+            return Ok();
+        }
+        else
+        {
+            return BadRequest(result.Errors);
+        }
     }
 
     [HttpPost]
