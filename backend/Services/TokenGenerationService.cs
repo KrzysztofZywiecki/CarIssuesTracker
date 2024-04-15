@@ -57,8 +57,8 @@ public class TokenGenerationService : ITokenGenerationService
         {
             Subject = new ClaimsIdentity(
                 [
-                    new Claim("Id", Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Id),
+                    new Claim(ClaimTypes.Name, applicationUser.UserName),
                     new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
                     new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString())

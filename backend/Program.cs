@@ -26,7 +26,7 @@ builder.Services.AddScoped<ICarsService, CarsService>();
 builder.Services.AddScoped<ICarIssuesService, CarIssuesService>();
 builder.Services.AddScoped<ITokenGenerationService, TokenGenerationService>();
 builder.Services.AddTransient<ExceptionConverterMiddleware>();
-builder.Services.AddSingleton<IAuthorizationHandler, CarOwnershipAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CarOwnershipAuthorizationHandler>();
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite("Data Source=carIssuesDatabase.db"));
 
 var securityKey = Encoding.ASCII.GetBytes(builder.Configuration["Backend:JWTSecret"]);
