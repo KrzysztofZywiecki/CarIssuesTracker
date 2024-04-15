@@ -61,10 +61,11 @@ public class TokenGenerationService : ITokenGenerationService
                     new Claim(ClaimTypes.Name, applicationUser.UserName),
                     new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
                     new Claim(JwtRegisteredClaimNames.Jti,
-                    Guid.NewGuid().ToString())
+                    Guid.NewGuid().ToString()),
                 ]),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenSecret), SecurityAlgorithms.HmacSha256),
-            Expires = DateTime.UtcNow.AddMinutes(5),
+            Expires = DateTime.UtcNow.AddMinutes(15),
+
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -43,7 +43,12 @@ public class CarsService(
 
         if (user != null)
         {
-            var car = new Car { Name = createCarDTO.Name };
+            var car = new Car
+            {
+                Name = createCarDTO.Name,
+                Manufacturer = createCarDTO.Manufacturer,
+                RegistrationNumber = createCarDTO.RegistrationNumber
+            };
             user.Cars.Add(car);
             await applicationDbContext.SaveChangesAsync();
             return new CarDTO(car);
@@ -81,6 +86,8 @@ public class CarsService(
     {
         var car = await GetCarAsync(userPrincipal, carId);
         car.Name = updateCarDTO.Name;
+        car.RegistrationNumber = updateCarDTO.RegistrationNumber;
+        car.Manufacturer = updateCarDTO.Manufacturer;
         await applicationDbContext.SaveChangesAsync();
         return new CarDTO(car);
     }

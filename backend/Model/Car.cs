@@ -21,6 +21,6 @@ public record CarDTO(Guid Id, string Name, string RegistrationNumber, string Man
     { }
 }
 
-public record CreateCarDTO(string Name);
+public record CreateCarDTO(string Name, string Manufacturer, string RegistrationNumber);
 
-public record UpdateCarDTO(string Name);
+public record UpdateCarDTO(string Name, string Manufacturer, string RegistrationNumber);
