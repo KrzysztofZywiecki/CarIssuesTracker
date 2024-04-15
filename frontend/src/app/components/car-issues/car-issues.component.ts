@@ -71,7 +71,16 @@ export class CarIssuesComponent {
             issue.id,
             Object.assign(new UpdateCarIssueDTO(), carIssueDTO)
           )
-          .subscribe((_) => {});
+          .subscribe((value) => {
+            this.carIssues = this.carIssues!.reduce((previous, current) => {
+              if (current.id === value.id) {
+                previous.push(value);
+              } else {
+                previous.push(current);
+              }
+              return previous;
+            }, [] as CarIssueDTO[]);
+          });
       }
     });
   }

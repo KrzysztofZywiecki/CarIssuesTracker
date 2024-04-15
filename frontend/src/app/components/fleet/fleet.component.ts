@@ -14,6 +14,7 @@ import { ConfirmDeleteComponent } from "../confirm-car-delete/confirm-delete.com
 import { Observable, switchMap } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AddNewCarDialogComponent } from "../add-new-car-dialog/add-new-car-dialog.component";
+import { MatDividerModule } from "@angular/material/divider";
 
 @Component({
   selector: "app-fleet",
@@ -28,6 +29,7 @@ import { AddNewCarDialogComponent } from "../add-new-car-dialog/add-new-car-dial
     RouterLink,
     MatDialogModule,
     MatProgressBarModule,
+    MatDividerModule,
   ],
   templateUrl: "./fleet.component.html",
   styleUrl: "./fleet.component.scss",

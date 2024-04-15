@@ -73,7 +73,7 @@ export class IssuesListComponent {
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 
-  expandedElement: CarIssueDTO | null = null;
+  expandedElement: string | null = null;
   dataSource: MatTableDataSource<CarIssueDTO> = new MatTableDataSource();
 
   deleteIssue(issueId: string) {
