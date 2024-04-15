@@ -34,6 +34,11 @@ export class AuthInterceptor implements HttpInterceptor {
           return this._authService.refreshTokens().pipe(
             switchMap(() => {
               this.isRefreshing = false;
+              req = req.clone({
+                setHeaders: {
+                  Authorization: `Bearer ${this._authService.accessToken}`,
+                },
+              });
               return next.handle(req);
             }),
             catchError((err) => {

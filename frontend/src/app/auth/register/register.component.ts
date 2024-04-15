@@ -12,6 +12,8 @@ import { AuthService } from "../../services/auth.service";
 import { LoginDTO } from "../../models/login-dto";
 import { firstValueFrom, of, switchMap } from "rxjs";
 import { SnackBarService } from "../../services/snack-bar.service";
+import { MatSelectModule } from "@angular/material/select";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: "app-register",
@@ -25,6 +27,8 @@ import { SnackBarService } from "../../services/snack-bar.service";
     MatCardModule,
     MatButtonModule,
     MatchingPasswordsDirective,
+    MatSelectModule,
+    MatIcon,
   ],
   templateUrl: "./register.component.html",
   styleUrl: "../auth-styles/style.scss",
@@ -39,6 +43,7 @@ export class RegisterComponent {
     email: "",
     password: "",
     confirmPassword: "",
+    username: "",
   };
 
   register() {

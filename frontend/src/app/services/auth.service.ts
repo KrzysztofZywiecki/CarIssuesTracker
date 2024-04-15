@@ -27,10 +27,12 @@ export class AuthService {
   constructor(private http: HttpClient) {
     this._accessToken = localStorage.getItem("accessToken");
     this._refreshToken = localStorage.getItem("refreshToken");
+    this._userId = localStorage.getItem("userId");
   }
 
   private _accessToken: string | null = null;
   private _refreshToken: string | null = null;
+  private _userId: string | null = null;
 
   isLoggedIn(): boolean {
     return this._accessToken !== null;
@@ -42,6 +44,10 @@ export class AuthService {
 
   get refreshToken(): string | null {
     return this._refreshToken;
+  }
+
+  get userId(): string | null {
+    return this._userId;
   }
 
   set accessToken(value: string | null) {
@@ -62,11 +68,21 @@ export class AuthService {
     }
   }
 
+  set userId(value: string | null) {
+    this._userId = value;
+    if (value !== null) {
+      localStorage.setItem("userId", value);
+    } else {
+      localStorage.removeItem("userId");
+    }
+  }
+
   logIn(loginInfo: LoginDTO): Observable<boolean> {
     const response = this.http
-      .post<LoginResponse>(`${environment.apiUrl}/login`, loginInfo)
+      .post<LoginResponse>(`${environment.apiUrl}/auth/login`, loginInfo)
       .pipe(
         tap((response) => {
+          this.userId = response.userId;
           this.accessToken = response.accessToken;
           this.refreshToken = response.refreshToken;
         }),
@@ -82,7 +98,7 @@ export class AuthService {
       return of({ status: 1, messages: ["Passwords don't match"] });
     }
     const response = this.http
-      .post<void>(`${environment.apiUrl}/register`, {
+      .post<void>(`${environment.apiUrl}/auth/register`, {
         email: registerInfo.email,
         password: registerInfo.password,
       })
@@ -101,18 +117,20 @@ export class AuthService {
   }
 
   logOut(): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/logOut`, {}).pipe(
+    return of().pipe(
       tap((_) => {
         this.refreshToken = null;
         this.accessToken = null;
+        this.userId = null;
       })
     );
   }
 
   refreshTokens(): Observable<void> {
     return this.http
-      .post<RefreshResponse>(`${environment.apiUrl}/refresh`, {
+      .post<RefreshResponse>(`${environment.apiUrl}/auth/refresh`, {
         refreshToken: this.refreshToken,
+        userId: this.userId,
       })
       .pipe(
         tap((response) => {
@@ -124,6 +142,7 @@ export class AuthService {
           catchError((error) => {
             this.refreshToken = null;
             this.accessToken = null;
+            this.userId = null;
             throw error;
           })
         )

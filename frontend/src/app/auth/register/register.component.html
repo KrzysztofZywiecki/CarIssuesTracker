@@ -1,6 +1,21 @@
 <h2 class="text">Register</h2>
 <form matchingPasswords #form="ngForm">
   <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input
+      matInput
+      [(ngModel)]="registerModel.username"
+      required="true"
+      name="username"
+      type="text"
+      #username="ngModel"
+    />
+    <mat-error *ngIf="username.errors?.['required']"
+      >Username is required.</mat-error
+    >
+    <mat-error *ngIf="email.errors?.['email']">E-mail is invalid.</mat-error>
+  </mat-form-field>
+  <mat-form-field>
     <mat-label>E-mail</mat-label>
     <input
       matInput
