@@ -13,6 +13,7 @@ import { RouterLink } from "@angular/router";
 import { ConfirmDeleteComponent } from "../confirm-car-delete/confirm-delete.component";
 import { Observable, switchMap } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { AddNewCarDialogComponent } from "../add-new-car-dialog/add-new-car-dialog.component";
 
 @Component({
   selector: "app-fleet",
@@ -42,21 +43,16 @@ export class FleetComponent implements OnInit {
 
   carsList: CarDTO[] | null = null;
 
-  model: CreateCarDTO = {
-    name: "",
-  };
-
   addNew() {
-    this._carsService
-      .createCar(this.model)
-      .pipe(
-        switchMap((_) => {
-          return this._carsService.getCars();
-        })
-      )
-      .subscribe((value) => {
-        this.carsList = value;
-      });
+    const dialogRef = this.dialog.open(AddNewCarDialogComponent);
+    dialogRef.afterClosed().subscribe((value) => {
+      console.log(value);
+      if (!!value) {
+        this._carsService.createCar(value).subscribe((value) => {
+          this.carsList = [...(this.carsList ?? []), value];
+        });
+      }
+    });
   }
 
   deleteCar(id: string, carName: string) {

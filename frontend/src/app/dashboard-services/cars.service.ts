@@ -17,8 +17,8 @@ export class CarsService {
     return this._http.get<CarDTO>(`${environment.apiUrl}/cars/${carId}`);
   }
 
-  createCar(createCarDTO: CreateCarDTO): Observable<void> {
-    return this._http.post<void>(`${environment.apiUrl}/cars`, createCarDTO);
+  createCar(createCarDTO: CreateCarDTO): Observable<CarDTO> {
+    return this._http.post<CarDTO>(`${environment.apiUrl}/cars`, createCarDTO);
   }
 
   deleteCar(carId: string): Observable<void> {
