@@ -61,7 +61,6 @@ public class AuthController(
         {
             Email = email,
             UserName = registerRequest.Username,
-            PhoneNumber = registerRequest.PhoneNumber
         };
 
         var result = await userManager.CreateAsync(user, registerRequest.Password);
