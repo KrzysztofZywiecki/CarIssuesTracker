@@ -32,8 +32,4 @@ export class UpdateIssueDialogComponent {
 
   resolved: boolean;
   model: CarIssueDTO;
-
-  transformToCurrency($event: FocusEvent) {
-    console.log($event);
-  }
 }

@@ -62,9 +62,9 @@ export class AuthService {
   set refreshToken(value: string | null) {
     this._refreshToken = value;
     if (value !== null) {
-      localStorage.setItem("refreshRoken", value);
+      localStorage.setItem("refreshToken", value);
     } else {
-      localStorage.removeItem("refreshRoken");
+      localStorage.removeItem("refreshToken");
     }
   }
 

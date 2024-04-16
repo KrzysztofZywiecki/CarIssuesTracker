@@ -50,6 +50,7 @@ builder.Services.AddAuthentication(x =>
             IssuerSigningKey = new SymmetricSecurityKey(securityKey),
             ValidateIssuer = false,
             ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
         };
     });
 builder.Services.AddAuthorization(options =>

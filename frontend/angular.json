@@ -20,6 +20,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "scripts": [
+              "node_modules/apexcharts/dist/apexcharts.min.js"
+            ],
             "outputPath": "dist/car-issues-tracker",
             "index": "src/index.html",
             "browser": "src/main.ts",

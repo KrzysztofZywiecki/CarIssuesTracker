@@ -17,7 +17,7 @@ public class CarsService(
 
     private async Task<Car> GetCarAsync(ClaimsPrincipal userPrincipal, Guid carId)
     {
-        var car = applicationDbContext.Cars.Include(x => x.ApplicationUser).First(x => x.Id == carId);
+        var car = applicationDbContext.Cars.Include(x => x.ApplicationUser).FirstOrDefault(x => x.Id == carId);
         if (car != null)
         {
             var authorizationResult = await authorizationService.AuthorizeAsync(userPrincipal, car, "SameOwnerPolicy");
@@ -39,7 +39,7 @@ public class CarsService(
     public async Task<CarDTO> CreateCar(ClaimsPrincipal userPrincipal, CreateCarDTO createCarDTO)
     {
         var userId = userManager.GetUserId(userPrincipal);
-        var user = await applicationDbContext.Users.Include(x => x.Cars).FirstAsync(x => x.Id == userId);
+        var user = await applicationDbContext.Users.Include(x => x.Cars).FirstOrDefaultAsync(x => x.Id == userId);
 
         if (user != null)
         {

@@ -80,7 +80,7 @@ public class AuthController(
     public async Task<ActionResult<TokensDTO>> RefreshTokens([FromBody] RefreshTokenDTO refreshTokenDTO)
     {
         var user = await applicationDbContext.Users.Include(x => x.RefreshTokens)
-            .FirstAsync(x => x.Id == refreshTokenDTO.userId);
+            .FirstOrDefaultAsync(x => x.Id == refreshTokenDTO.userId);
         if (user is not null)
         {
             var validationSuccessful = await tokenGenerationService.ValidateRefreshToken(user, refreshTokenDTO.refreshToken);

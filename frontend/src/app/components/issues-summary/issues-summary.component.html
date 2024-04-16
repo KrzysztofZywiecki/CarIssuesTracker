@@ -1,1 +1,5 @@
-<p>issues-summary works!</p>
+@for(carSummary of cars | async; track carSummary.carId) {
+<p>{{ carSummary | json }}</p>
+
+<app-summary-plot [data]="carSummary.summaryEntries"></app-summary-plot>
+}

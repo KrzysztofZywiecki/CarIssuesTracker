@@ -36,8 +36,7 @@ public class TokenGenerationService : ITokenGenerationService
 
     public async Task<bool> ValidateRefreshToken(ApplicationUser applicationUser, string refreshToken)
     {
-        var retrievedToken = applicationUser.RefreshTokens.First(x => x.Token == refreshToken);
-
+        var retrievedToken = applicationUser.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken);
         if (retrievedToken is not null)
         {
             var now = DateTime.UtcNow;
