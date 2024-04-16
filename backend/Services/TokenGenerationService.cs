@@ -52,16 +52,25 @@ public class TokenGenerationService : ITokenGenerationService
 
     public string GenerateAccessToken(ApplicationUser applicationUser)
     {
+        IEnumerable<Claim> claims = [
+                new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Id),
+                new Claim(JwtRegisteredClaimNames.Jti,
+                Guid.NewGuid().ToString()),
+            ];
+        if (applicationUser.UserName is not null)
+        {
+            claims.Append(new Claim(ClaimTypes.Name, applicationUser.UserName));
+        }
+        if (applicationUser.Email is not null)
+        {
+            claims.Append(new Claim(ClaimTypes.Name, applicationUser.Email));
+        }
+
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(
-                [
-                    new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Id),
-                    new Claim(ClaimTypes.Name, applicationUser.UserName),
-                    new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti,
-                    Guid.NewGuid().ToString()),
-                ]),
+                claims
+            ),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenSecret), SecurityAlgorithms.HmacSha256),
             Expires = DateTime.UtcNow.AddMinutes(15),
 
