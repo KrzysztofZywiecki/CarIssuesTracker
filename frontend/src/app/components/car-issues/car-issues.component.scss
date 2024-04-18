@@ -29,3 +29,20 @@
     margin-bottom: 1rem;
   }
 }
+
+.loading-text {
+  font-size: x-large;
+  margin-bottom: 0.5rem;
+}
+
+.loading-container {
+  height: 100%;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

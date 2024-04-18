@@ -31,7 +31,7 @@
   <ng-container matColumnDef="repairDateTime">
     <th mat-header-cell *matHeaderCellDef>Resolution time</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.repairDateTime | date : "mediumDate" }}
+      {{ (element.repairDateTime | date : "mediumDate") ?? "-" }}
     </td>
   </ng-container>
 

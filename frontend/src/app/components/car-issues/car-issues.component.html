@@ -1,3 +1,4 @@
+@if(carInfo !== null && carIssues !== null) {
 <div class="container">
   <div>
     {{ carInfo | json }}
@@ -30,3 +31,9 @@
   ></app-issues-list>
   }
 </div>
+} @else {
+<div class="loading-container">
+  <span class="loading-text">Loading</span>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+}

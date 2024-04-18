@@ -12,13 +12,14 @@ import { AddNewIssueDialogComponent } from "../add-new-issue-dialog/add-new-issu
 import { UpdateIssueDialogComponent } from "../update-issue-dialog/update-issue-dialog.component";
 import { UpdateCarIssueDTO } from "../../models/update-car-issue-dto";
 import { ConfirmDeleteComponent } from "../confirm-car-delete/confirm-delete.component";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 @Component({
   selector: "app-car-issues",
   standalone: true,
   templateUrl: "./car-issues.component.html",
   styleUrl: "./car-issues.component.scss",
-  imports: [CommonModule, IssuesListComponent, MatButton],
+  imports: [CommonModule, IssuesListComponent, MatButton, MatProgressBarModule],
 })
 export class CarIssuesComponent {
   constructor(
