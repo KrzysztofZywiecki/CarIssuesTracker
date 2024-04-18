@@ -45,7 +45,7 @@ public class TokenGenerationService : ITokenGenerationService
             applicationUser.RefreshTokens.Remove(retrievedToken);
             await userManager.UpdateAsync(applicationUser);
 
-            return true;
+            return !expired;
         }
         return false;
     }
