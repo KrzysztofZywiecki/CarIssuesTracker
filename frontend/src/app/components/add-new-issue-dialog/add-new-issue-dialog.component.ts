@@ -25,4 +25,6 @@ import { TextFieldModule } from "@angular/cdk/text-field";
 })
 export class AddNewIssueDialogComponent {
   issueDTO = new CreateCarIssueDTO();
+
+  maxDate: Date = new Date();
 }

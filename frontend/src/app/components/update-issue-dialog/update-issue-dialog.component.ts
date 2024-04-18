@@ -27,8 +27,12 @@ export class UpdateIssueDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) private dialogData: CarIssueDTO) {
     this.resolved = this.dialogData.resolved;
     this.model = { ...this.dialogData };
-    this.model.repairDateTime = new Date(Date.now()).toISOString();
+    if (!this.model.repairDateTime) {
+      this.model.repairDateTime = new Date(Date.now()).toISOString();
+    }
   }
+
+  maxDate: Date = new Date();
 
   resolved: boolean;
   model: CarIssueDTO;

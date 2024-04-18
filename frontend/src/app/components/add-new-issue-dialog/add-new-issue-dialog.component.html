@@ -32,6 +32,7 @@
         name="creationDate"
         [(ngModel)]="issueDTO.createDateTime"
         #dateInput="ngModel"
+        [max]="maxDate"
       />
       <mat-datepicker-toggle
         matIconSuffix

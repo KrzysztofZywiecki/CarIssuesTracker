@@ -51,7 +51,7 @@ export class NavbarComponent {
   @Input({ required: true }) sidepanelRef!: MatSidenav;
 
   logOut() {
-    this._authService.logOut().subscribe();
+    this._authService.logOut();
     this._router.navigate(["auth"]);
   }
 }
