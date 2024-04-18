@@ -1,14 +1,17 @@
-import { Component, Input, OnInit, ViewChild, input } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { CarSummaryEntry } from "../../models/car-summary-dto";
 import {
   ApexAxisChartSeries,
   ApexChart,
   ApexTitleSubtitle,
+  ApexTooltip,
   ApexXAxis,
   ApexYAxis,
   ChartComponent,
   NgApexchartsModule,
 } from "ng-apexcharts";
+import { delay, of } from "rxjs";
+import { CommonModule } from "@angular/common";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -16,22 +19,33 @@ export type ChartOptions = {
   xaxis: ApexXAxis;
   yaxis: ApexYAxis;
   title: ApexTitleSubtitle;
+  tooltip: ApexTooltip;
 };
 
 @Component({
   selector: "app-summary-plot",
   standalone: true,
-  imports: [NgApexchartsModule],
+  imports: [NgApexchartsModule, CommonModule],
   templateUrl: "./summary-plot.component.html",
   styleUrl: "./summary-plot.component.scss",
 })
-export class SummaryPlotComponent implements OnInit {
-  constructor() {}
+export class SummaryPlotComponent implements OnInit, OnDestroy {
+  constructor() {
+    this.plotTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", this.darkModeMatcher);
+  }
+
+  @ViewChild("chart") chart!: ChartComponent;
+
   ngOnInit(): void {
     this.chartOptions = {
       series: [
         {
-          name: "Total monthly cost",
+          name: "Total monthly spending",
           data: this.getData(),
         },
       ],
@@ -42,6 +56,12 @@ export class SummaryPlotComponent implements OnInit {
       },
       title: {
         text: "Costs chart",
+      },
+      tooltip: {
+        x: {
+          show: true,
+          format: "MMM yyyy",
+        },
       },
       yaxis: {
         labels: {
@@ -58,7 +78,17 @@ export class SummaryPlotComponent implements OnInit {
 
   @Input({ required: true }) data: CarSummaryEntry[] | null = null;
 
-  @ViewChild("chart") chart!: ChartComponent;
+  plotTheme: "light" | "dark" = "dark";
+
+  darkModeMatcher = (event: MediaQueryListEvent) => {
+    this.plotTheme = event.matches ? "dark" : "light";
+  };
+
+  ngOnDestroy(): void {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .removeEventListener("change", this.darkModeMatcher);
+  }
 
   getData() {
     const data = this.data!.map((element) => {

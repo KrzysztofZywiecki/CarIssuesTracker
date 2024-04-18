@@ -1,11 +1,12 @@
-@if(chartOptions != null) {
+@if(chartOptions !== null) {
 <apx-chart
   [series]="chartOptions.series"
   [chart]="chartOptions.chart"
   [xaxis]="chartOptions.xaxis"
   [yaxis]="chartOptions.yaxis"
   [title]="chartOptions.title"
-  [theme]="{ mode: 'dark' }"
+  [theme]="{ mode: plotTheme }"
+  [tooltip]="chartOptions.tooltip"
   #chart
 ></apx-chart>
 
