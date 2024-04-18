@@ -1,0 +1,15 @@
+table {
+  width: 100%;
+}
+
+.mat-column-monthlyCost {
+  text-align: right;
+}
+
+tr.element-row:hover td {
+  background: rgba(128, 128, 128, 0.1);
+}
+
+tr.element-row:active td {
+  background: rgba(128, 128, 128, 0.1);
+}

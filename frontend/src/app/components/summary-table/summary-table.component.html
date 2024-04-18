@@ -1,0 +1,29 @@
+@if(data !== null) {
+<table
+  mat-table
+  [dataSource]="data"
+  multiTemplateDataRows
+  class="mat-elevation-z8"
+>
+  <ng-container matColumnDef="month">
+    <th mat-header-cell *matHeaderCellDef>Month</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.month | date : "MMM yyyy" }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="monthlyCost">
+    <th mat-header-cell *matHeaderCellDef>Monthly cost</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.totalCost | currency }}
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['month', 'monthlyCost']"></tr>
+  <tr
+    mat-row
+    *matRowDef="let element; columns: ['month', 'monthlyCost']"
+    class="element-row"
+  ></tr>
+</table>
+}

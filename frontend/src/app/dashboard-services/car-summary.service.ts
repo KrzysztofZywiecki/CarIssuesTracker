@@ -10,9 +10,15 @@ import { environment } from "../../environments/environment.development";
 export class CarSummaryService {
   constructor(private _http: HttpClient) {}
 
-  getSummaryForCar(carId: string): Observable<CarSummaryDTO> {
+  getMonthlySpendingForCar(carId: string): Observable<CarSummaryDTO> {
     return this._http.get<CarSummaryDTO>(
-      `${environment.apiUrl}/summary/${carId}`
+      `${environment.apiUrl}/summary/${carId}/monthlySpending`
+    );
+  }
+
+  getTotalSpendingForCar(carId: string): Observable<number> {
+    return this._http.get<number>(
+      `${environment.apiUrl}/summary/${carId}/totalSpending`
     );
   }
 }
