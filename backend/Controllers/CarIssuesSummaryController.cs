@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Route("summary")]
+[Route("summary/{CarId}")]
 [Authorize]
 public class CarIssuesSummaryController(ApplicationDbContext applicationDbContext, IAuthorizationService authorizationService) : ControllerBase
 {
@@ -37,12 +37,21 @@ public class CarIssuesSummaryController(ApplicationDbContext applicationDbContex
     }
 
     [HttpGet]
-    [Route("{CarId}")]
-    public async Task<ActionResult<CarSummaryDTO>> GetSummaryForCar([FromRoute] Guid CarId)
+    [Route("monthlySpending")]
+    public async Task<ActionResult<CarSummaryDTO>> GetMonthlySpendingForCar([FromRoute] Guid CarId)
     {
         var car = await GetCarAsync(User, CarId);
-        var entries = car.Issues.Where(x => x.RepairDateTime is not null).GroupBy(x => x.RepairDateTime!.Value.ToString("yyyy-MM"))
+        var entries = car.Issues.Where(x => x.Resolved).GroupBy(x => x.RepairDateTime!.Value.ToString("yyyy-MM"))
             .Select(x => new SummaryEntryDTO(x.Sum(y => (float)(y.RepairCost ?? 0)), x.Key));
         return Ok(new CarSummaryDTO(CarId, entries));
+    }
+
+    [HttpGet]
+    [Route("totalSpending")]
+    public async Task<ActionResult<decimal>> GetTotalSpendingForCar([FromRoute] Guid CarId)
+    {
+        var car = await GetCarAsync(User, CarId);
+        var spending = car.Issues.Where(x => x.Resolved).Sum(x => x.RepairCost);
+        return Ok(spending);
     }
 }
