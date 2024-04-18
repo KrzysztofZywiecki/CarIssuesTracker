@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpBackend, HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, signal } from "@angular/core";
 import {
   Observable,
@@ -8,6 +8,7 @@ import {
   of,
   switchMap,
   tap,
+  throwError,
 } from "rxjs";
 import { environment } from "../../environments/environment.development";
 import { LoginDTO } from "../models/login-dto";
@@ -24,7 +25,7 @@ import { RefreshResponse } from "../models/refresh-response";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private backend: HttpBackend) {
     this._accessToken = localStorage.getItem("accessToken");
     this._refreshToken = localStorage.getItem("refreshToken");
     this._userId = localStorage.getItem("userId");
@@ -78,8 +79,11 @@ export class AuthService {
   }
 
   logIn(loginInfo: LoginDTO): Observable<boolean> {
+    const headers = new HttpHeaders().set("AuthInterceptorSkip", "");
     const response = this.http
-      .post<LoginResponse>(`${environment.apiUrl}/auth/login`, loginInfo)
+      .post<LoginResponse>(`${environment.apiUrl}/auth/login`, loginInfo, {
+        headers,
+      })
       .pipe(
         tap((response) => {
           this.userId = response.userId;
@@ -97,11 +101,17 @@ export class AuthService {
     if (registerInfo.password !== registerInfo.confirmPassword) {
       return of({ status: 1, messages: ["Passwords don't match"] });
     }
+    const headers = new HttpHeaders().set("AuthInterceptorSkip", "");
+
     const response = this.http
-      .post<void>(`${environment.apiUrl}/auth/register`, {
-        email: registerInfo.email,
-        password: registerInfo.password,
-      })
+      .post<void>(
+        `${environment.apiUrl}/auth/register`,
+        {
+          email: registerInfo.email,
+          password: registerInfo.password,
+        },
+        { headers }
+      )
       .pipe(
         map((_) => {
           return { status: 0 } as RegisterSuccess;
@@ -116,36 +126,35 @@ export class AuthService {
     return response;
   }
 
-  logOut(): Observable<void> {
-    return of().pipe(
-      tap((_) => {
-        this.refreshToken = null;
-        this.accessToken = null;
-        this.userId = null;
-      })
-    );
+  logOut(): void {
+    this.refreshToken = null;
+    this.accessToken = null;
+    this.userId = null;
   }
 
-  refreshTokens(): Observable<void> {
+  refreshTokens(): Observable<RefreshResponse> {
+    const headers = new HttpHeaders().set("AuthInterceptorSkip", "");
+
     return this.http
-      .post<RefreshResponse>(`${environment.apiUrl}/auth/refresh`, {
-        refreshToken: this.refreshToken,
-        userId: this.userId,
-      })
+      .post<RefreshResponse>(
+        `${environment.apiUrl}/auth/refresh`,
+        {
+          refreshToken: this.refreshToken,
+          userId: this.userId,
+        },
+        { headers }
+      )
       .pipe(
+        catchError((error) => {
+          this.refreshToken = null;
+          this.accessToken = null;
+          this.userId = null;
+          return throwError(() => error);
+        }),
         tap((response) => {
           this.refreshToken = response.refreshToken;
           this.accessToken = response.accessToken;
-        }),
-        map(
-          (_) => {},
-          catchError((error) => {
-            this.refreshToken = null;
-            this.accessToken = null;
-            this.userId = null;
-            throw error;
-          })
-        )
+        })
       );
   }
 }

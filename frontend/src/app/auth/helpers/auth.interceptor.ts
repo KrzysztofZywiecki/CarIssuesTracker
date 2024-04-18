@@ -17,6 +17,7 @@ import {
   retry,
   switchMap,
   take,
+  tap,
   throwError,
 } from "rxjs";
 import { AuthService } from "../../services/auth.service";
@@ -33,15 +34,19 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    if (req.headers.has("AuthInterceptorSkip")) {
+      const headers = req.headers.delete("AuthInterceptorSkip");
+      return next.handle(req.clone({ headers }));
+    }
     if (this._authService.accessToken !== null) {
       req = this.addAccessToken(req);
     }
     return next.handle(req).pipe(
       catchError((error) => {
-        if (error.status == 401) {
+        if (error.status === 401) {
           return this.refreshTokens(req, next);
         } else {
-          throw error;
+          return throwError(() => error);
         }
       })
     );
@@ -70,13 +75,14 @@ export class AuthInterceptor implements HttpInterceptor {
       this.tokenRefreshed.next(false);
 
       return this._authService.refreshTokens().pipe(
-        concatMap((_) => {
+        switchMap((_) => {
           this.tokenRefreshed.next(true);
           return next.handle(this.addAccessToken(req));
         }),
         catchError((err) => {
           this._authService.logOut();
-          throw err;
+          this._router.navigate(["auth"]);
+          return throwError(() => err);
         }),
         finalize(() => {
           this.isRefreshing = false;
