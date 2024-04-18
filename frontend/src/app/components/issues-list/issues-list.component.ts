@@ -1,9 +1,12 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -53,16 +56,23 @@ import {
     ]),
   ],
 })
-export class IssuesListComponent {
+export class IssuesListComponent implements AfterViewInit, OnChanges {
   constructor(private breakpointObserver: BreakpointObserver) {
     breakpointObserver.observe([Breakpoints.XSmall]).subscribe((value) => {
       this.isSmallScreen = !value.matches;
     });
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
   @Input({ required: true }) set carIssues(carIssues: CarIssueDTO[]) {
     this.dataSource = new MatTableDataSource(carIssues);
-    this.dataSource.paginator = this.paginator;
   }
 
   @Output("delete") deletionEvent = new EventEmitter<string>();

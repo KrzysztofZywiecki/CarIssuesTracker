@@ -1,5 +1,30 @@
-@for(carSummary of cars | async; track carSummary.carId) {
-<p>{{ carSummary | json }}</p>
+@if(cars | async; as carsList) {
+<mat-accordion>
+  @for(carSummary of carsList; track carSummary.carInfo.id) {
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ carSummary.carInfo.name }}</mat-panel-title>
+      <mat-panel-description>
+        <span>{{ carSummary.carInfo.registrationNumber }}</span
+        ><span>{{ carSummary.carInfo.manufacturer }}</span>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
-<app-summary-plot [data]="carSummary.summaryEntries"></app-summary-plot>
+    <p>Total spending: {{ carSummary.total | currency }}</p>
+    @if(isSmallScreen) {
+    <app-summary-plot
+      [data]="carSummary.monthly.summaryEntries"
+    ></app-summary-plot>
+    }
+    <app-summary-table
+      [data]="carSummary.monthly.summaryEntries"
+    ></app-summary-table>
+  </mat-expansion-panel>
+  }
+</mat-accordion>
+} @else {
+<div class="loading-container">
+  <span class="loading-text">Loading</span>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
 }
