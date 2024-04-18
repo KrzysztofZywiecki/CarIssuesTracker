@@ -1,6 +1,64 @@
 <h2 mat-dialog-title>Edit car info</h2>
 <mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <mat-label>Car name</mat-label>
+      <input
+        matInput
+        [(ngModel)]="model.name"
+        required
+        name="title"
+        #title="ngModel"
+      />
+      <mat-error *ngIf="title.errors?.['required']"
+        >Car name is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Registration number</mat-label>
+      <input
+        matInput
+        [(ngModel)]="model.registrationNumber"
+        required
+        name="registrationNumber"
+        #registrationNumber="ngModel"
+      />
+      <mat-error *ngIf="registrationNumber.errors?.['required']"
+        >Field is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Manufacturer</mat-label>
+      <input
+        matInput
+        [(ngModel)]="model.manufacturer"
+        required
+        name="manufacturer"
+        #manufacturer="ngModel"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (manufacturer of filteredManufacturers; track manufacturer) {
+        <mat-option [value]="manufacturer">{{ manufacturer }}</mat-option>
+        }
+      </mat-autocomplete>
+      <mat-error *ngIf="manufacturer.errors?.['required']"
+        >Field is required</mat-error
+      >
+    </mat-form-field>
+  </form>
   <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button mat-button [mat-dialog-close]="null">Cancel</button>
+    <div class="spacer"></div>
+    <button
+      mat-button
+      mat-flat-button
+      type="button"
+      color="primary"
+      [disabled]="form.invalid"
+      [mat-dialog-close]="model"
+    >
+      Update
+    </button>
   </mat-dialog-actions>
 </mat-dialog-content>

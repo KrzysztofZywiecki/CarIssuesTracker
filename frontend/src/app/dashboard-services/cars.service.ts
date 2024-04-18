@@ -4,6 +4,7 @@ import { CarDTO } from "../models/car-dto";
 import { Observable } from "rxjs";
 import { environment } from "../../environments/environment.development";
 import { CreateCarDTO } from "../models/create-car-dto";
+import { UpdateCarDTO } from "../models/update-car-dto";
 
 @Injectable()
 export class CarsService {
@@ -23,5 +24,12 @@ export class CarsService {
 
   deleteCar(carId: string): Observable<void> {
     return this._http.delete<void>(`${environment.apiUrl}/cars/${carId}`);
+  }
+
+  updateCarInfo(carId: string, updateCarDTO: UpdateCarDTO) {
+    return this._http.put<CarDTO>(
+      `${environment.apiUrl}/cars/${carId}`,
+      updateCarDTO
+    );
   }
 }

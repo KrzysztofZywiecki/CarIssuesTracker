@@ -44,7 +44,18 @@ export class CarIssuesComponent {
   carIssues: Array<CarIssueDTO> | null = null;
 
   openCarEditDialog() {
-    this.dialogService.open(EditCarDialogComponent);
+    const dialogHandle = this.dialogService.open(EditCarDialogComponent, {
+      data: this.carInfo,
+    });
+    dialogHandle.afterClosed().subscribe((value) => {
+      if (!!value) {
+        this.carsService
+          .updateCarInfo(this.carId, value)
+          .subscribe((newCar) => {
+            this.carInfo = newCar;
+          });
+      }
+    });
   }
 
   openAddIssueDialog() {
