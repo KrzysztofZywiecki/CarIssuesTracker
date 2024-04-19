@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 public class TokenGenerationService : ITokenGenerationService
 {
 
-    public TokenGenerationService(IConfiguration configuration, UserManager<ApplicationUser> userManager)
+    public TokenGenerationService(IConfiguration configuration, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
     {
         var secret = configuration["Backend:JWTSecret"];
         Debug.Assert(secret is not null);
