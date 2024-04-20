@@ -1,0 +1,24 @@
+.title {
+  font-size: larger;
+}
+
+.subtitle {
+  opacity: 0.8;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  align-items: stretch;
+}
+
+.actions > :not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    width: 100%;
+  }
+}

@@ -1,1 +1,16 @@
-{{ userInfo | async | json }}
+@if(userInfo !== null;) {
+<p class="title">{{ userInfo.username }}</p>
+<p class="subtitle">{{ userInfo.email }}</p>
+
+<div class="actions">
+  <button mat-flat-button color="primary" (click)="changePassword()">
+    Change password
+  </button>
+  <button mat-flat-button color="primary" (click)="updateProfile()">
+    Update profile
+  </button>
+  <button mat-flat-button color="warn" (click)="deleteAccount()">
+    Delete account
+  </button>
+</div>
+}

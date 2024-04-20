@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Update profile</h2>
+<mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <mat-label>E-mail</mat-label>
+      <input
+        matInput
+        [(ngModel)]="model.email"
+        required="true"
+        name="email"
+        type="email"
+        email="true"
+        #email="ngModel"
+      />
+      <mat-error *ngIf="email.errors?.['required']"
+        >E-mail is required.</mat-error
+      >
+      <mat-error *ngIf="email.errors?.['email']">E-mail is invalid.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        required
+        name="username"
+        [(ngModel)]="model.username"
+        #username="ngModel"
+      />
+      <mat-error *ngIf="username.errors?.['required']"
+        >Username is required</mat-error
+      >
+    </mat-form-field>
+  </form>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <div class="spacer"></div>
+    <button
+      mat-button
+      [mat-dialog-close]="model"
+      color="primary"
+      [disabled]="form.invalid"
+    >
+      Update
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>

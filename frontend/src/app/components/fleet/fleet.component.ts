@@ -10,7 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { CreateCarDTO } from "../../models/create-car-dto";
 import { RouterLink } from "@angular/router";
-import { ConfirmDeleteComponent } from "../confirm-car-delete/confirm-delete.component";
+import { ConfirmDeleteComponent } from "../confirm-delete/confirm-delete.component";
 import { Observable, switchMap } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AddNewCarDialogComponent } from "../add-new-car-dialog/add-new-car-dialog.component";
