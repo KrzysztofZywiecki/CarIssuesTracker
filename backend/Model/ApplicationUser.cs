@@ -12,11 +12,10 @@ public class ApplicationUser() : IdentityUser
 }
 
 [method: JsonConstructor]
-public record UserDTO(string? Username, string? Email, string? PhoneNumber)
+public record UserDTO(string? Username, string? Email)
 {
     public UserDTO(ApplicationUser user) : this(
         Username: user.UserName,
-        Email: user.Email,
-        PhoneNumber: user.PhoneNumber)
+        Email: user.Email)
     { }
 }

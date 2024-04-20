@@ -5,6 +5,7 @@ using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Backend.DTOs;
 
 namespace Backend.Controllers;
 
@@ -37,7 +38,6 @@ public class UserController(UserManager<ApplicationUser> userManager) : Controll
         if (user != null)
         {
             user.Email = userDTO.Email;
-            user.PhoneNumber = userDTO.PhoneNumber;
             user.UserName = userDTO.Username;
             await userManager.UpdateAsync(user);
             return Ok(new UserDTO(user));
@@ -46,5 +46,37 @@ public class UserController(UserManager<ApplicationUser> userManager) : Controll
         {
             return Unauthorized();
         }
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> DeleteUser([FromQuery] string password)
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            bool isPasswordCorrect = await userManager.CheckPasswordAsync(user, password);
+            if (isPasswordCorrect)
+            {
+                await userManager.DeleteAsync(user);
+                return NoContent();
+            }
+        }
+        return Unauthorized();
+    }
+
+    [HttpPost]
+    [Route("changePassword")]
+    public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDTO)
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            var identityResult = await userManager.ChangePasswordAsync(user, changePasswordDTO.oldPassword, changePasswordDTO.newPassword);
+            if (identityResult.Succeeded)
+            {
+                return Ok();
+            }
+        }
+        return Unauthorized();
     }
 }
