@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers;
 
-[Route("/cars")]
+[Route("cars")]
 [Authorize]
 public class CarController(
     ApplicationDbContext carIssueContext,
