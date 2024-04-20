@@ -1,9 +1,8 @@
 @if(carInfo !== null && carIssues !== null) {
 <div class="container">
-  <div>
-    {{ carInfo | json }}
-  </div>
-
+  <p class="title">{{ carInfo.name }}</p>
+  <p class="subtitle">{{ carInfo.manufacturer }}</p>
+  <p class="subtitle">{{ carInfo.registrationNumber }}</p>
   <div class="actions">
     <button
       mat-button

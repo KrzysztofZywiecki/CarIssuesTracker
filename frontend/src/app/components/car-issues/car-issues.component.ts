@@ -11,7 +11,7 @@ import { EditCarDialogComponent } from "../edit-car-dialog/edit-car-dialog.compo
 import { AddNewIssueDialogComponent } from "../add-new-issue-dialog/add-new-issue-dialog.component";
 import { UpdateIssueDialogComponent } from "../update-issue-dialog/update-issue-dialog.component";
 import { UpdateCarIssueDTO } from "../../models/update-car-issue-dto";
-import { ConfirmDeleteComponent } from "../confirm-car-delete/confirm-delete.component";
+import { ConfirmDeleteComponent } from "../confirm-delete/confirm-delete.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 @Component({
