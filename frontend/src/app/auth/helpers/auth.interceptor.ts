@@ -34,12 +34,12 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    if (this._authService.accessToken !== null) {
+      req = this.addAccessToken(req);
+    }
     if (req.headers.has("AuthInterceptorSkip")) {
       const headers = req.headers.delete("AuthInterceptorSkip");
       return next.handle(req.clone({ headers }));
-    }
-    if (this._authService.accessToken !== null) {
-      req = this.addAccessToken(req);
     }
     return next.handle(req).pipe(
       catchError((error) => {
