@@ -109,6 +109,7 @@ export class AuthService {
         {
           email: registerInfo.email,
           password: registerInfo.password,
+          username: registerInfo.username,
         },
         { headers }
       )
